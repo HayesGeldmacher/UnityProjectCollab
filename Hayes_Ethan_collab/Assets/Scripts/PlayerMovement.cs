@@ -9,11 +9,17 @@ public class PlayerMovement : MonoBehaviour
     public float ForwardSpeed = 10;
     public float SidewaysSpeed = 5;
 
+    [Header("Physics")]
+    public float Gravity = 9.81f;
+
     // private stuff
+    private Rigidbody rb;
     private float hInput, vInput;
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -27,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
         transform.Translate(direction*Time.deltaTime);
 
         UpdateRotation();
+        //rb.AddForce(transform.position.normalized*-Gravity);
     }
 
     void UpdateRotation()
