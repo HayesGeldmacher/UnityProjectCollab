@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 927105712}
   - component: {fileID: 927105711}
   - component: {fileID: 927105710}
+  - component: {fileID: 927105716}
   - component: {fileID: 927105715}
   m_Layer: 0
   m_Name: Player
@@ -517,6 +518,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2014877546}
+  - {fileID: 1975488030}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -536,6 +538,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &927105716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927105709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115b78c9722eee0489e1aad93ddc7d7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Shot: {fileID: 652912610530086323, guid: b98636a666c48d34ea39cb0ebe4bd862, type: 3}
+  ChargeShot: {fileID: 4167063103466154384, guid: a7f4b986a1e32584e91fc75448f9260f, type: 3}
+  ShotDespawnTime: 5
+  ShotDamage: 0
+  ChargeShotDamage: 0
+  MinChargeTime: 0.5
+  MaxChargeTime: 3
+  ShotCoolDown: 0
+  ChargeShotCoolDown: 0
+  _chargeTime: 0
+  _isCharging: 0
 --- !u!1 &1706571377
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +656,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1706571377}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1975488029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1975488030}
+  m_Layer: 0
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1975488030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975488029}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 927105714}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2014877543
 GameObject:
   m_ObjectHideFlags: 0
