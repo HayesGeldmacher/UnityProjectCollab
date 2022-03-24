@@ -21,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
         // !!! NEEDS A RIGIDBODY COMPONENT WITH ROTATION CONSTRAINTS !!!
         rb = GetComponent<Rigidbody>();
         
-
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -30,23 +29,29 @@ public class PlayerMovement : MonoBehaviour
         hInput = Input.GetAxisRaw("Horizontal");
         vInput = Input.GetAxisRaw("Vertical");
 
+        // set player velocity
         Vector3 direction = Vector3.forward*vInput*ForwardSpeed+Vector3.right*hInput*SidewaysSpeed;
         rb.velocity = transform.TransformDirection(direction);
 
+        // locks position when not moving to prevent sliding
         if(hInput == 0 && vInput == 0)
             rb.constraints = RigidbodyConstraints.FreezeAll;
         else
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
+        // point feet towards sphere
         UpdateRotation();
+        // attract player towards sphere
         rb.AddForce(transform.position.normalized*-Gravity);
     }
 
     void UpdateRotation()
 	{
-        float mouseX = Input.GetAxis("Mouse X");
+        // point players feet towards sphere
 		Vector3 gravityUp = transform.position.normalized;
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
+        // rotate around y axis with mouse movement
+        float mouseX = Input.GetAxis("Mouse X");
         transform.Rotate(Vector3.up, mouseX);
 	}
 }
