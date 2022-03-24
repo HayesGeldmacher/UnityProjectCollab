@@ -6,8 +6,8 @@ public class PlayerMovement : MonoBehaviour
 {
     // public stuff
     [Header("Movement")]
-    public float ForwardSpeed = 10;
-    public float SidewaysSpeed = 5;
+    public float ForwardSpeed = 12;
+    public float SidewaysSpeed = 9;
 
     [Header("Physics")]
     public float Gravity = 9.81f;
@@ -26,6 +26,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        UpdatePosition();
+        UpdateRotation();
+    }
+
+    void UpdatePosition(){
         hInput = Input.GetAxisRaw("Horizontal");
         vInput = Input.GetAxisRaw("Vertical");
 
@@ -35,16 +40,13 @@ public class PlayerMovement : MonoBehaviour
 
         // locks position when not moving to prevent sliding
         if(hInput == 0 && vInput == 0)
-            rb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
         else
             rb.constraints = RigidbodyConstraints.FreezeRotation;
 
-        // point feet towards sphere
-        UpdateRotation();
         // attract player towards sphere
         rb.AddForce(transform.position.normalized*-Gravity);
     }
-
     void UpdateRotation()
 	{
         // point players feet towards sphere
