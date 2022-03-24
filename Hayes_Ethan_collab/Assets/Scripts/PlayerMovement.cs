@@ -15,25 +15,31 @@ public class PlayerMovement : MonoBehaviour
     // private stuff
     private Rigidbody rb;
     private float hInput, vInput;
-    // Start is called before the first frame update
+    
     void Start()
     {
+        // !!! NEEDS A RIGIDBODY COMPONENT WITH ROTATION CONSTRAINTS !!!
         rb = GetComponent<Rigidbody>();
+        
 
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        hInput = Input.GetAxis("Horizontal");
-        vInput = Input.GetAxis("Vertical");
+        hInput = Input.GetAxisRaw("Horizontal");
+        vInput = Input.GetAxisRaw("Vertical");
 
         Vector3 direction = Vector3.forward*vInput*ForwardSpeed+Vector3.right*hInput*SidewaysSpeed;
-        transform.Translate(direction*Time.deltaTime);
+        rb.velocity = transform.TransformDirection(direction);
+
+        if(hInput == 0 && vInput == 0)
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        else
+            rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         UpdateRotation();
-        //rb.AddForce(transform.position.normalized*-Gravity);
+        rb.AddForce(transform.position.normalized*-Gravity);
     }
 
     void UpdateRotation()
