@@ -44,17 +44,17 @@ public class PlayerCombat : MonoBehaviour
 
     void UpdateShooting(){
         // TODO: fix bug with double/repeated shots when mouse up after Charge timeout
-        // TODO: fix bug where charge shot is fired if havent fired in long time
 
-        _chargeTime = Time.time-_chargeStartTime;
         _coolDownTime -= Time.deltaTime;
+        
         // start charging on click
-        if(Input.GetMouseButton(0) && !_isCharging && _coolDownTime<0){
+        if(Input.GetMouseButtonDown(0) && !_isCharging && _coolDownTime<0){
             _isCharging = true;
             _chargeStartTime = Time.time;
         }
+        _chargeTime = Time.time - _chargeStartTime;
         // stop charging on mouse up or timer runs out
-        if((!Input.GetMouseButton(0) || _chargeTime>MaxChargeTime) && _isCharging){
+        if ((Input.GetMouseButtonUp(0) || _chargeTime>MaxChargeTime) && _isCharging){
             _isCharging = false;
             if(_chargeTime>MinChargeTime)
                 FireChargeShot(_chargeTime);
