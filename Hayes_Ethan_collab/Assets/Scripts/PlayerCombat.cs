@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     [Header("Shots")]
+    public Transform BulletSpawn;
     public Transform Shot;
     public Transform ChargeShot;
     public float ShotDespawnTime = 5;
@@ -22,18 +23,15 @@ public class PlayerCombat : MonoBehaviour
     public float ChargeShotCoolDown;
 
 
-    private Transform BulletSpawn;
-
     private float _chargeStartTime;
-    public float _chargeTime;
-    public bool _isCharging;
+    private float _chargeTime;
+    private bool _isCharging;
     private float _coolDownTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        // TODO update this to be more precise
-        BulletSpawn = GetComponentInChildren<Transform>();
+
     }
 
     // Update is called once per frame
@@ -43,8 +41,6 @@ public class PlayerCombat : MonoBehaviour
     }
 
     void UpdateShooting(){
-        // TODO: fix bug with double/repeated shots when mouse up after Charge timeout
-
         _coolDownTime -= Time.deltaTime;
         
         // start charging on click
@@ -66,7 +62,7 @@ public class PlayerCombat : MonoBehaviour
     void FireShot(){
         GameObject shot = Instantiate(Shot, BulletSpawn).gameObject; // create shot
         shot.transform.SetParent(null); // detach from player transform
-        shot.GetComponent<Shot>().SetDamage(ShotDamage); // set damage of shot
+        shot.GetComponent<Projectile>().SetDamage(ShotDamage); // set damage of shot
         Destroy(shot, ShotDespawnTime); // destroy it for performance reasons
         _coolDownTime = ShotCoolDown; // update cooldown so no new rapid shots
     }
@@ -76,7 +72,7 @@ public class PlayerCombat : MonoBehaviour
         shot.transform.SetParent(null); // detach from player transform
         // percentage of charge * damage for charged shot
         float damage = timeCharged/MaxChargeTime * ChargeShotDamage;
-        shot.GetComponent<Shot>().SetDamage(damage);// set damage of shot
+        shot.GetComponent<Projectile>().SetDamage(damage);// set damage of shot
         Destroy(shot, ShotDespawnTime);// destroy it for performance reasons
         _coolDownTime = ChargeShotCoolDown;// update cooldown so no new rapid shots
     }
