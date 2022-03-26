@@ -62,7 +62,7 @@ public class PlayerCombat : MonoBehaviour
     void FireShot(){
         GameObject shot = Instantiate(Shot, BulletSpawn).gameObject; // create shot
         shot.transform.SetParent(null); // detach from player transform
-        shot.GetComponent<Projectile>().SetDamage(ShotDamage); // set damage of shot
+        shot.GetComponent<Projectile>().Damage = ShotDamage; // set damage of shot
         Destroy(shot, ShotDespawnTime); // destroy it for performance reasons
         _coolDownTime = ShotCoolDown; // update cooldown so no new rapid shots
     }
@@ -72,7 +72,7 @@ public class PlayerCombat : MonoBehaviour
         shot.transform.SetParent(null); // detach from player transform
         // percentage of charge * damage for charged shot
         float damage = timeCharged/MaxChargeTime * ChargeShotDamage;
-        shot.GetComponent<Projectile>().SetDamage(damage);// set damage of shot
+        shot.GetComponent<Projectile>().Damage = damage;// set damage of shot
         Destroy(shot, ShotDespawnTime);// destroy it for performance reasons
         _coolDownTime = ChargeShotCoolDown;// update cooldown so no new rapid shots
     }

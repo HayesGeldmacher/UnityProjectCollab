@@ -11,10 +11,9 @@ public class Projectile : MonoBehaviour
     [Header("Engine")]
     public LayerMask CanHit;
 
-    public delegate void HitHandler(GameObject hit, GameObject projectile);
+    public delegate void HitHandler(GameObject hit);
     public event HitHandler OnHit;
 
-    private float _damage;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,26 +23,27 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
-        
+        UpdatePosition();
     }
 
-    private void Hit(GameObject hit, GameObject proj)
+    void UpdatePosition()
     {
+        transform.Translate(Vector3.forward * Speed * Time.deltaTime);
+    }
 
-        // TODO: deal damage
+    private void Hit(GameObject hit)
+    {
+        Damageable d = hit.GetComponent<Damageable>();
+        if (d != null)
+            d.Damage(Damage);
         Debug.Log($"HIT-{hit.gameObject.name}");
-        Destroy(proj);
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         // I think this does stuff with layer masks to check if the thing hit is in it
         if (CanHit == (CanHit | (1 << other.gameObject.layer)))
-            OnHit(other.gameObject, this.gameObject);
-    }
-
-    public void SetDamage(float damage){
-        _damage = damage;
+            OnHit(other.gameObject);
     }
 }
