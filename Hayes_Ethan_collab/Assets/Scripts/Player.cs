@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Damageable
 {
     // public stuff
     [Header("Movement")]
@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
 
     // private stuff
     private Rigidbody _rb;
+    private Damageable _d;
     private float _hInput, _vInput;
 
     private float _chargeStartTime;
