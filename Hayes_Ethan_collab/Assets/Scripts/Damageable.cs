@@ -16,12 +16,17 @@ public class Damageable : MonoBehaviour
     void Start()
     {
         OnDeath += Death;
-        OnDamage += ()=> { }; // add empty method so the event can be used
+        OnDamage += Damaged;
     }
 
     void Death()
     {
         Destroy(gameObject);
+    }
+
+    void Damaged()
+    {
+        Debug.Log($"{name} - {Health}");
     }
 
     public void Damage(float damage)

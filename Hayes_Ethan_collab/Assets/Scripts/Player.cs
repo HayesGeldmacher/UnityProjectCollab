@@ -30,7 +30,6 @@ public class Player : Damageable
 
     // private stuff
     private Rigidbody _rb;
-    private Damageable _d;
     private float _hInput, _vInput;
 
     private float _chargeStartTime;

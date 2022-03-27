@@ -35,9 +35,9 @@ public class Enemy : Damageable
 
     void FireProjectile()
     {
-        _cooldown += CooldownTime;
         GameObject proj = Instantiate(Projectile, BulletSpawn);
         proj.transform.SetParent(null);
         Destroy(proj, DespawnTime);
+        _cooldown = CooldownTime;
     }
 }
