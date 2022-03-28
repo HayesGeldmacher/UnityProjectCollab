@@ -6,34 +6,34 @@ public class Damageable : MonoBehaviour
 {
     public float Health;
 
-    public delegate void DamageHandler();
+    public delegate void DamageHandler(float damage);
     public event DamageHandler OnDamage;
 
-    public delegate void DeathHandler();
+    public delegate void DeathHandler(GameObject obj);
     public event DeathHandler OnDeath;
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
         OnDeath += Death;
         OnDamage += Damaged;
     }
 
-    void Death()
+    void Death(GameObject obj)
     {
-        Destroy(gameObject);
+        Destroy(obj);
     }
 
-    void Damaged()
+    void Damaged(float damage)
     {
         Debug.Log($"{name} - {Health}");
     }
 
     public void Damage(float damage)
     {
-        OnDamage();
+        OnDamage(damage);
         Health -= damage;
         if (Health <= 0)
-            OnDeath();
+            OnDeath(gameObject);
     }
 }

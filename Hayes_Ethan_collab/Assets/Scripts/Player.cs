@@ -37,8 +37,9 @@ public class Player : Damageable
     private bool _isCharging;
     private float _coolDownTime;
 
-    void Start()
+    public override void Start()
     {
+        base.Start();
         _rb = GetComponent<Rigidbody>();
         
         Cursor.lockState = CursorLockMode.Locked;
