@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Projectile : MonoBehaviour
 {
-    [Header("Balance")]
+    [Header("Projectile")]
     public float Damage;
     public float Speed;
 
-    [Header("Engine")]
+    [Header("Layer Mask")]
     public LayerMask CanHit;
 
     public delegate void HitHandler(GameObject hit);

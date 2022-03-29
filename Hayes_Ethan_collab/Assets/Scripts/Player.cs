@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Player : Damageable
 {
     // public stuff
@@ -28,10 +29,13 @@ public class Player : Damageable
     public float ShotCoolDown;
     public float ChargeShotCoolDown;
 
+    // animation stuff
+    private bool _isWalking;
+
     // private stuff
     private Rigidbody _rb;
     private float _hInput, _vInput;
-
+    private bool _fireUp, _fireDown, _fireHold;
     private float _chargeStartTime;
     private float _chargeTime;
     private bool _isCharging;
@@ -50,6 +54,7 @@ public class Player : Damageable
         UpdatePosition();
         UpdateRotation();
         UpdateShooting();
+        UpdateAnimation();
     }
 
     void UpdatePosition(){
@@ -83,16 +88,24 @@ public class Player : Damageable
     void UpdateShooting()
     {
         _coolDownTime -= Time.deltaTime;
+        if(Input.GetAxisRaw("Fire1") > .5 && !_fireHold){
+            _fireDown = true;
+            _fireHold = true;
+        }
+        if(Input.GetAxisRaw("Fire1") < .5 && _fireHold){
+            _fireUp = true;
+            _fireHold = false;
+        }
 
         // start charging on click
-        if (Input.GetMouseButtonDown(0) && !_isCharging && _coolDownTime < 0)
+        if (_fireDown && !_isCharging && _coolDownTime < 0)
         {
             _isCharging = true;
             _chargeStartTime = Time.time;
         }
         _chargeTime = Time.time - _chargeStartTime;
         // stop charging on mouse up or timer runs out
-        if ((Input.GetMouseButtonUp(0) || _chargeTime > MaxChargeTime) && _isCharging)
+        if ((_fireUp || _chargeTime > MaxChargeTime) && _isCharging)
         {
             _isCharging = false;
             if (_chargeTime > MinChargeTime)
@@ -100,6 +113,9 @@ public class Player : Damageable
             else
                 FireShot();
         }
+
+        _fireUp = false;
+        _fireDown = false;
     }
 
     void FireShot()
@@ -120,5 +136,9 @@ public class Player : Damageable
         shot.GetComponent<Projectile>().Damage = damage;// set damage of shot
         Destroy(shot, ShotDespawnTime);// destroy it for performance reasons
         _coolDownTime = ChargeShotCoolDown;// update cooldown so no new rapid shots
+    }
+
+    void UpdateAnimation(){
+        _isWalking = !(_hInput == 0 && _vInput == 0);
     }
 }
