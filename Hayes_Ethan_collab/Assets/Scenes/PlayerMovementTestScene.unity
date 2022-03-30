@@ -437,9 +437,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 100
+  Invincible: 0
   ForwardSpeed: 12
   SidewaysSpeed: 9
   Gravity: 9.81
+  DashSpeed: 25
+  DashTime: 0.2
+  InvincibilityTime: 0.3
+  DashCooldown: 2
   BulletSpawn: {fileID: 1975488030}
   Shot: {fileID: 6671374649850836924, guid: b98636a666c48d34ea39cb0ebe4bd862, type: 3}
   ChargeShot: {fileID: 6671374649850836924, guid: 51b206d660c154b64ae9c79cb7c57580, type: 3}
@@ -451,6 +456,7 @@ MonoBehaviour:
   ShotCoolDown: 0.05
   ChargeShotCoolDown: 1
   Anim: {fileID: 1422802007}
+  _isDashing: 0
 --- !u!136 &927105711
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1039,6 +1045,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 100
+  Invincible: 0
   BulletSpawn: {fileID: 566124170}
   MovementSpeed: 0
   PlayerTargetRadius: 0
