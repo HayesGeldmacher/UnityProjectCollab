@@ -31,6 +31,7 @@ public class Player : Damageable
 
     // animation stuff
     private bool _isWalking;
+    public Animator anim;
 
     // private stuff
     private Rigidbody _rb;
@@ -68,6 +69,7 @@ public class Player : Damageable
         // locks position when not moving to prevent sliding
         if(_hInput == 0 && _vInput == 0)
             _rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
+
         else
             _rb.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -140,5 +142,14 @@ public class Player : Damageable
 
     void UpdateAnimation(){
         _isWalking = !(_hInput == 0 && _vInput == 0);
+
+        // if we have more animations in the future, might be useful to use integer instead of bool
+
+        if (_isWalking)
+            anim.SetBool("Walking", true);
+        else
+            anim.SetBool("Walking", false);
+
+
     }
 }
