@@ -19,10 +19,10 @@ public class Enemy : Damageable
     private GameObject _player;
 
     // Start is called before the first frame update
-    public override void Start()
+    void Start()
     {
-        base.Start();
         _player = GameObject.Find("Player");
+        OnDeath += () => Destroy(gameObject);
     }
 
     // Update is called once per frame

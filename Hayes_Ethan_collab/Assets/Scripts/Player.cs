@@ -29,9 +29,10 @@ public class Player : Damageable
     public float ShotCoolDown;
     public float ChargeShotCoolDown;
 
-    // animation stuff
-    private bool _isWalking;
-    public Animator anim;
+    [Header("Animation")]
+    public Animator Anim;
+    private int _isWalking;
+    
 
     // private stuff
     private Rigidbody _rb;
@@ -42,12 +43,12 @@ public class Player : Damageable
     private bool _isCharging;
     private float _coolDownTime;
 
-    public override void Start()
+    void Start()
     {
-        base.Start();
         _rb = GetComponent<Rigidbody>();
         
         Cursor.lockState = CursorLockMode.Locked;
+        OnDeath += () => Destroy(gameObject);
     }
 
     void Update()
@@ -123,7 +124,9 @@ public class Player : Damageable
     void FireShot()
     {
         GameObject shot = Instantiate(Shot, BulletSpawn); // create shot
+        Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
+        shot.transform.localScale = scale;
         shot.GetComponent<Projectile>().Damage = ShotDamage; // set damage of shot
         Destroy(shot, ShotDespawnTime); // destroy it for performance reasons
         _coolDownTime = ShotCoolDown; // update cooldown so no new rapid shots
@@ -132,7 +135,9 @@ public class Player : Damageable
     void FireChargeShot(float timeCharged)
     {
         GameObject shot = Instantiate(ChargeShot, BulletSpawn); // create shot
+        Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
+        shot.transform.localScale = scale;
         // percentage of charge * damage for charged shot
         float damage = timeCharged / MaxChargeTime * ChargeShotDamage;
         shot.GetComponent<Projectile>().Damage = damage;// set damage of shot
@@ -141,15 +146,20 @@ public class Player : Damageable
     }
 
     void UpdateAnimation(){
-        _isWalking = !(_hInput == 0 && _vInput == 0);
+
+        // checks if the user is walking primarily forward or sideways, then checks
+        // which direction the user walks to determine the value for _isWalking
+
+        // 0 - not walking, 1 - forward, 2 - backward, 3 - right, 4 - left
+        if(_vInput <= .01 && _hInput <= .01)
+            _isWalking = 0;
+        else if(Mathf.Abs(_vInput)>Mathf.Abs(_hInput))
+            _isWalking = _vInput > 0 ? 1 : 2;
+        else
+            _isWalking = _vInput > 0 ? 3 : 4;
 
         // if we have more animations in the future, might be useful to use integer instead of bool
 
-        if (_isWalking)
-            anim.SetBool("Walking", true);
-        else
-            anim.SetBool("Walking", false);
-
-
+        Anim.SetBool("Walking", _isWalking!=0);
     }
 }
