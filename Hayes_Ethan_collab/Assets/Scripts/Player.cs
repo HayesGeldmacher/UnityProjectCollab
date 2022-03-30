@@ -11,6 +11,12 @@ public class Player : Damageable
     public float SidewaysSpeed = 9;
     public float Gravity = 9.81f;
 
+    [Header("Dash")]
+    public float DashSpeed;
+    public float DashTime;
+    public float InvincibilityTime;
+    public float DashCooldown;
+
     [Header("Shots")]
     public Transform BulletSpawn;
     public GameObject Shot;
@@ -37,6 +43,9 @@ public class Player : Damageable
     // private stuff
     private Rigidbody _rb;
     private float _hInput, _vInput;
+    private Vector3 _direction;
+    public bool _isDashing;
+    private float _dashStartTime, _dashEndTime;
     private bool _fireUp, _fireDown, _fireHold;
     private float _chargeStartTime;
     private float _chargeTime;
@@ -48,6 +57,8 @@ public class Player : Damageable
         _rb = GetComponent<Rigidbody>();
         
         Cursor.lockState = CursorLockMode.Locked;
+
+        OnDamage += () => Debug.Log($"Player Hit - Health: {Health}");
         OnDeath += () => Destroy(gameObject);
     }
 
@@ -62,15 +73,35 @@ public class Player : Damageable
     void UpdatePosition(){
         _hInput = Input.GetAxisRaw("Horizontal");
         _vInput = Input.GetAxisRaw("Vertical");
+        
+        bool _dashButton = Input.GetAxisRaw("Dash") > .1;
+
+        // sets the start and end of dashing and invincibility
+        if(_dashButton && !_isDashing && Time.time-_dashEndTime >= DashCooldown){
+            _isDashing = true;
+            Invincible = true;
+            _dashStartTime = Time.time;
+        }
+        if(Time.time-_dashStartTime >= InvincibilityTime){
+            Invincible = false;
+        }
+        if(_isDashing & Time.time-_dashStartTime >= DashTime){
+            _isDashing = false;
+            _dashEndTime = Time.time;
+        }
 
         // set player velocity
-        Vector3 direction = Vector3.forward*_vInput*ForwardSpeed+Vector3.right*_hInput*SidewaysSpeed;
-        _rb.velocity = transform.TransformDirection(direction);
+        if(!_isDashing){
+            _direction = transform.forward*_vInput*ForwardSpeed+transform.right*_hInput*SidewaysSpeed;
+            _rb.velocity = _direction;
+        }else{
+            _direction = transform.forward*_vInput+transform.right*_hInput;
+            _rb.velocity = _direction * DashSpeed;
+        }
 
         // locks position when not moving to prevent sliding
         if(_hInput == 0 && _vInput == 0)
             _rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
-
         else
             _rb.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -84,18 +115,18 @@ public class Player : Damageable
 		Vector3 gravityUp = transform.position.normalized;
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
         // rotate around y axis with mouse movement
-        float mouseX = Input.GetAxis("Mouse X");
-        transform.Rotate(Vector3.up, mouseX);
+        float hLook = Input.GetAxis("Horizontal Look");
+        transform.Rotate(Vector3.up, hLook);
 	}
 
     void UpdateShooting()
     {
         _coolDownTime -= Time.deltaTime;
-        if(Input.GetAxisRaw("Fire1") > .5 && !_fireHold){
+        if(Input.GetAxisRaw("Fire") > .5 && !_fireHold){
             _fireDown = true;
             _fireHold = true;
         }
-        if(Input.GetAxisRaw("Fire1") < .5 && _fireHold){
+        if(Input.GetAxisRaw("Fire") < .5 && _fireHold){
             _fireUp = true;
             _fireHold = false;
         }

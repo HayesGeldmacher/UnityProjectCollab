@@ -43,8 +43,10 @@ public class Projectile : MonoBehaviour
     private void Hit(GameObject hit)
     {
         if (hit.TryGetComponent<Damageable>(out Damageable d))
-            d.Damage(Damage);
-        Destroy(gameObject);
+            if(d.Damage(Damage))
+                Destroy(gameObject);
+            else
+                Debug.Log("INVINCIBLE");
     }
 
     private void OnTriggerEnter(Collider other)

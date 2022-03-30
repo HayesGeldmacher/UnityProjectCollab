@@ -5,6 +5,7 @@ using UnityEngine;
 public class Damageable : MonoBehaviour
 {
     public float Health;
+    public bool Invincible;
 
     public delegate void DamageHandler();
     public event DamageHandler OnDamage;
@@ -12,13 +13,14 @@ public class Damageable : MonoBehaviour
     public delegate void DeathHandler();
     public event DeathHandler OnDeath;
 
-    public void Damage(float damage)
+    public bool Damage(float damage)
     {
-        
+        if(Invincible) return false;
         Health -= damage;
         if(OnDamage != null)
             OnDamage();
         if (Health <= 0 && OnDeath != null)
             OnDeath();
+        return true;
     }
 }
