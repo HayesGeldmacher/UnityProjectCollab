@@ -111,6 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 30
   Speed: 5
+  SeekPlayer: 0
+  SeekStrength: 0
   CanHit:
     serializedVersion: 2
     m_Bits: 8

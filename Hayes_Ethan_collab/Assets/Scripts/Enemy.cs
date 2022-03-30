@@ -28,10 +28,23 @@ public class Enemy : Damageable
     // Update is called once per frame
     void Update()
     {
+        UpdatePosition();
+        UpdateRotation();
+
         BulletSpawn.transform.LookAt(_player.transform);
         _cooldown -= Time.deltaTime;
         if (_cooldown <= 0)
             FireProjectile();
+    }
+
+    public virtual void UpdatePosition(){
+
+    }
+
+    void UpdateRotation(){
+        // point feet towards sphere
+		Vector3 gravityUp = transform.position.normalized;
+		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
     }
 
     void FireProjectile()

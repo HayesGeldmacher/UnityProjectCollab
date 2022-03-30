@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     [Header("Projectile")]
     public float Damage;
     public float Speed;
+    public bool SeekPlayer;
+    public float SeekStrength;
 
     [Header("Layer Mask")]
     public LayerMask CanHit;
@@ -29,6 +31,12 @@ public class Projectile : MonoBehaviour
 
     void UpdatePosition()
     {
+        if(SeekPlayer){
+            Vector3 targetPoint = GameObject.FindGameObjectWithTag("Player").transform.position - transform.position;
+            Quaternion desiredRotation = Quaternion.FromToRotation(transform.forward, targetPoint) * transform.rotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, SeekStrength/100);
+        }
+
         transform.Translate(Vector3.forward * Speed * Time.deltaTime);
     }
 
