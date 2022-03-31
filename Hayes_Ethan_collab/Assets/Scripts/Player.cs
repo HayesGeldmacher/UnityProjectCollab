@@ -40,6 +40,7 @@ public class Player : Damageable
     public Transform PlayerModel;
     private bool _isWalking;
     
+    
 
     // private stuff
     private Rigidbody _rb;
@@ -202,5 +203,7 @@ public class Player : Damageable
 
         Anim.SetBool("Walking", _isWalking);
         Anim.SetBool("Dash", _isDashing);
+
+        
     }
 }
