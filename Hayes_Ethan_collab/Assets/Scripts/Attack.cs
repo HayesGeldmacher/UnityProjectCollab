@@ -43,13 +43,8 @@ public class Attack : MonoBehaviour
         foreach(AttackSpawn spawn in AttackSpawns){
             if(spawn.TrackPlayer){
 
-            }else{
-                // spawn.SpawnTransform.RotateAround(spawn.SpawnTransform.position, transform.right, spawn.RotationSpeed.x * Time.deltaTime);
-                // spawn.SpawnTransform.RotateAround(spawn.SpawnTransform.position, transform.up, spawn.RotationSpeed.y * Time.deltaTime);
-                // spawn.SpawnTransform.RotateAround(spawn.SpawnTransform.position, transform.forward, spawn.RotationSpeed.z * Time.deltaTime);
-
+            }else
                 spawn.SpawnTransform.Rotate(spawn.RotationSpeed * Time.deltaTime);
-            }
         }
     }
 
