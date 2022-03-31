@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: playerupper
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 1
+  - m_Path: Armature/Hips
+    m_Weight: 0
+  - m_Path: Armature/Hips/Spine
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Neck
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Neck/Head
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Neck/Head/Head_end
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.L
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.L/UpperArm.L
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/LowerArm.L_end
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.R
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.R/UpperArm.R
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.R/UpperArm.R/LowerArm.R
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine/Chest/Shoulder.R/UpperArm.R/LowerArm.R/LowerArm.R_end
+    m_Weight: 1
+  - m_Path: Armature/Hips/Thigh.L
+    m_Weight: 0
+  - m_Path: Armature/Hips/Thigh.L/Calf.L
+    m_Weight: 0
+  - m_Path: Armature/Hips/Thigh.L/Calf.L/Foot.L
+    m_Weight: 0
+  - m_Path: Armature/Hips/Thigh.L/Calf.L/Foot.L/Foot.L_end
+    m_Weight: 0
+  - m_Path: Armature/Hips/Thigh.R
+    m_Weight: 0
+  - m_Path: Armature/Hips/Thigh.R/Calf.R
+    m_Weight: 0
+  - m_Path: Armature/Hips/Thigh.R/Calf.R/Foot.R
+    m_Weight: 0
+  - m_Path: Armature/Hips/Thigh.R/Calf.R/Foot.R/Foot.R_end
+    m_Weight: 0
+  - m_Path: Armature/LegIK.L
+    m_Weight: 0
+  - m_Path: Armature/LegIK.L/LegIK.L_end
+    m_Weight: 0
+  - m_Path: Armature/LegIK.R
+    m_Weight: 0
+  - m_Path: Armature/LegIK.R/LegIK.R_end
+    m_Weight: 0
+  - m_Path: Armature/PoleTarget.L
+    m_Weight: 0
+  - m_Path: Armature/PoleTarget.L/PoleTarget.L_end
+    m_Weight: 0
+  - m_Path: Armature/PoleTarget.R
+    m_Weight: 0
+  - m_Path: Armature/PoleTarget.R/PoleTarget.R_end
+    m_Weight: 0
+  - m_Path: Empty
+    m_Weight: 1
+  - m_Path: Empty.001
+    m_Weight: 1
+  - m_Path: Mesh
+    m_Weight: 1
