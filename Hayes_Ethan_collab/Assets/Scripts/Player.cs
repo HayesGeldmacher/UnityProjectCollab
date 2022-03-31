@@ -192,5 +192,18 @@ public class Player : Damageable
         // if we have more animations in the future, might be useful to use integer instead of bool
 
         Anim.SetBool("Walking", _isWalking);
+
+      
+
+        if(_isDashing )
+        {
+            Anim.SetBool("Dash", true);
+            
+        }
+        else
+        {
+            Anim.SetBool("Dash", false);
+        }
+        
     }
 }
