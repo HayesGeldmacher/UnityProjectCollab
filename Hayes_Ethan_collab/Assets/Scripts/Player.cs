@@ -37,14 +37,15 @@ public class Player : Damageable
 
     [Header("Animation")]
     public Animator Anim;
-    private int _isWalking;
+    public Transform PlayerModel;
+    public bool _isWalking;
     
 
     // private stuff
     private Rigidbody _rb;
-    private float _hInput, _vInput;
+    public float _hInput, _vInput;
     private Vector3 _direction;
-    public bool _isDashing;
+    private bool _isDashing;
     private float _dashStartTime, _dashEndTime;
     private bool _fireUp, _fireDown, _fireHold;
     private float _chargeStartTime;
@@ -111,12 +112,20 @@ public class Player : Damageable
 
     void UpdateRotation()
 	{
+        
+        BulletSpawn.LookAt(Vector3.zero);
         // point players feet towards sphere
 		Vector3 gravityUp = transform.position.normalized;
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
+        // point player model in direction that is walking
+        PlayerModel.transform.rotation = Quaternion.FromToRotation(PlayerModel.transform.up, gravityUp) * PlayerModel.transform.rotation;
+        Quaternion desiredRotation = Quaternion.FromToRotation(PlayerModel.forward, _direction) * PlayerModel.rotation;
+        PlayerModel.transform.rotation = Quaternion.Slerp(PlayerModel.transform.rotation, desiredRotation, .02f);
+
         // rotate around y axis with mouse movement
         float hLook = Input.GetAxis("Horizontal Look");
         transform.Rotate(Vector3.up, hLook);
+        PlayerModel.Rotate(Vector3.up, -hLook);
 	}
 
     void UpdateShooting()
@@ -178,19 +187,10 @@ public class Player : Damageable
 
     void UpdateAnimation(){
 
-        // checks if the user is walking primarily forward or sideways, then checks
-        // which direction the user walks to determine the value for _isWalking
-
-        // 0 - not walking, 1 - forward, 2 - backward, 3 - right, 4 - left
-        if(_vInput <= .01 && _hInput <= .01)
-            _isWalking = 0;
-        else if(Mathf.Abs(_vInput)>Mathf.Abs(_hInput))
-            _isWalking = _vInput > 0 ? 1 : 2;
-        else
-            _isWalking = _vInput > 0 ? 3 : 4;
+        _isWalking = (Mathf.Abs(_vInput) > 0.1 || Mathf.Abs(_hInput) > 0.1);
 
         // if we have more animations in the future, might be useful to use integer instead of bool
 
-        Anim.SetBool("Walking", _isWalking!=0);
+        Anim.SetBool("Walking", _isWalking);
     }
 }
