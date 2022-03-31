@@ -40,10 +40,20 @@ public class Attack : MonoBehaviour
     }
 
     void UpdateAttackSpawns(){
+        foreach(AttackSpawn spawn in AttackSpawns){
+            if(spawn.TrackPlayer){
 
+            }else{
+                spawn.SpawnTransform.RotateAround(spawn.SpawnTransform.position, transform.right, spawn.RotationSpeed.x * Time.deltaTime);
+                spawn.SpawnTransform.RotateAround(spawn.SpawnTransform.position, transform.up, spawn.RotationSpeed.y * Time.deltaTime);
+                spawn.SpawnTransform.RotateAround(spawn.SpawnTransform.position, transform.forward, spawn.RotationSpeed.z * Time.deltaTime);
+
+                //sspawn.SpawnTransform.Rotate(spawn.RotationSpeed * Time.deltaTime);
+            }
+        }
     }
 
-    async void UpdateProjectiles(){
+    void UpdateProjectiles(){
         if(!Triggered())
             return;
         for(int i = 0; i < Projectiles.Length; i++)
@@ -58,8 +68,10 @@ public class Attack : MonoBehaviour
     void SpawnProjectile(AttackInfo proj){
         foreach(string spawn in proj.AttackSpawnNames){
             GameObject shot = Instantiate(proj.Shot, _attackSpawnLookup[spawn].SpawnTransform);
+            if(!proj.LockToSpawn)
+                shot.transform.parent = null;
             // TODO: deparent, variable destroy times
-            Destroy(shot, 5);
+            Destroy(shot, proj.DespawnTime);
         }
 
     }
@@ -76,6 +88,7 @@ public class AttackSpawn{
     public Transform SpawnTransform;
     public bool TrackPlayer;
     public float PlayerTrackStrength;
+    public Vector3 RotationSpeed;
 }
 
 [System.Serializable]
@@ -85,6 +98,8 @@ public class AttackInfo{
     public float Predelay;
     public int Repeats;
     public float TimeBetweenShots;
+    public float DespawnTime;
+    public bool LockToSpawn;
 }
 
 [System.Serializable]
