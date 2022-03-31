@@ -61,6 +61,7 @@ public class Player : Damageable
         Cursor.lockState = CursorLockMode.Locked;
 
         OnDamage += () => Debug.Log($"Player Hit - Health: {Health}");
+        OnDamage += () => Anim.SetTrigger("Damaged");
         OnDeath += () => Destroy(gameObject);
     }
 
@@ -201,6 +202,5 @@ public class Player : Damageable
 
         Anim.SetBool("Walking", _isWalking);
         Anim.SetBool("Dash", _isDashing);
-      
     }
 }
