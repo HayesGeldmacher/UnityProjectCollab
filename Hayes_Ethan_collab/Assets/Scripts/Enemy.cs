@@ -6,9 +6,6 @@ public class Enemy : Damageable
 {
     public Transform BulletSpawn;
 
-    [Header("Movement")]
-    public float MovementSpeed;
-    public float PlayerTargetRadius;
 
     [Header("Attacks")]
     public GameObject Projectile;
