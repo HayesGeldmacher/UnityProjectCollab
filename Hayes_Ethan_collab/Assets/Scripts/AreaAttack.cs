@@ -9,6 +9,7 @@ public class AreaAttack : MonoBehaviour
     public float Damage;
     public float TimeBetweenDamages;
     public bool OnlyDamageOnce;
+    public float DespawnTime;
 
     [Header("Layer Mask")]
     public LayerMask CanHit;
@@ -22,6 +23,7 @@ public class AreaAttack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Destroy(gameObject, DespawnTime);
         OnHit += Hit;
     }
 
