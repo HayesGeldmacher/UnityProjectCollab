@@ -76,10 +76,11 @@ public class Player : Damageable
         _hInput = Input.GetAxisRaw("Horizontal");
         _vInput = Input.GetAxisRaw("Vertical");
         
-        bool _dashButton = Input.GetAxisRaw("Dash") > .1;
+        bool dashButton = Input.GetAxisRaw("Dash") > .1;
+        bool moving = Mathf.Abs(_hInput)>.1 || Mathf.Abs(_vInput)>.1;
 
         // sets the start and end of dashing and invincibility
-        if(_dashButton && !_isDashing && Time.time-_dashEndTime >= DashCooldown){
+        if(moving && dashButton && !_isDashing && Time.time-_dashEndTime >= DashCooldown){
             _isDashing = true;
             Invincible = true;
             _lockedHInput = _hInput;
@@ -148,7 +149,7 @@ public class Player : Damageable
         }
 
         // start charging on click
-        if (_fireDown && !_isCharging && _coolDownTime < 0)
+        if (_fireDown && !_isCharging && !_isDashing && _coolDownTime < 0)
         {
             _isCharging = true;
             _chargeStartTime = Time.time;
@@ -199,18 +200,7 @@ public class Player : Damageable
         // if we have more animations in the future, might be useful to use integer instead of bool
 
         Anim.SetBool("Walking", _isWalking);
-
+        Anim.SetBool("Dash", _isDashing);
       
-
-        if(_isDashing )
-        {
-            Anim.SetBool("Dash", true);
-            
-        }
-        else
-        {
-            Anim.SetBool("Dash", false);
-        }
-        
     }
 }
