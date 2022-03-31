@@ -53,6 +53,7 @@ public class Projectile : MonoBehaviour
     {
         // I think this does stuff with layer masks to check if the thing hit is in it
         if (CanHit == (CanHit | (1 << other.gameObject.layer)))
-            OnHit(other.gameObject);
+            if(OnHit != null)
+                OnHit(other.gameObject);
     }
 }
