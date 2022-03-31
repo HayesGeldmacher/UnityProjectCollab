@@ -38,12 +38,12 @@ public class Player : Damageable
     [Header("Animation")]
     public Animator Anim;
     public Transform PlayerModel;
-    public bool _isWalking;
+    private bool _isWalking;
     
 
     // private stuff
     private Rigidbody _rb;
-    public float _hInput, _vInput;
+    private float _hInput, _vInput;
     private Vector3 _direction;
     private bool _isDashing;
     private float _dashStartTime, _dashEndTime;

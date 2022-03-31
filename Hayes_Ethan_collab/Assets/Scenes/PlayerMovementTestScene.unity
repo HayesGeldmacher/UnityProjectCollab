@@ -132,7 +132,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
       propertyPath: m_LocalPosition.x
@@ -152,15 +156,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -457,7 +461,10 @@ MonoBehaviour:
   ShotCoolDown: 0.05
   ChargeShotCoolDown: 1
   Anim: {fileID: 1422802007}
-  _isDashing: 0
+  PlayerModel: {fileID: 1422802006}
+  _isWalking: 0
+  _hInput: 0
+  _vInput: 0
 --- !u!136 &927105711
 CapsuleCollider:
   m_ObjectHideFlags: 0
