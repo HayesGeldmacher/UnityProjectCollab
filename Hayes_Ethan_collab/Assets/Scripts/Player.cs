@@ -54,6 +54,9 @@ public class Player : Damageable
     private float _chargeTime;
     private bool _isCharging;
     private float _coolDownTime;
+    //private bool for Fire animation, sets to true in FireShot()
+    private bool _isFiring;
+
 
     void Start()
     {
@@ -173,6 +176,7 @@ public class Player : Damageable
 
     void FireShot()
     {
+        _isFiring = true; 
         GameObject shot = Instantiate(Shot, BulletSpawn); // create shot
         Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
@@ -180,6 +184,7 @@ public class Player : Damageable
         shot.GetComponent<Projectile>().Damage = ShotDamage; // set damage of shot
         Destroy(shot, ShotDespawnTime); // destroy it for performance reasons
         _coolDownTime = ShotCoolDown; // update cooldown so no new rapid shots
+        
     }
 
     void FireChargeShot(float timeCharged)
@@ -205,5 +210,13 @@ public class Player : Damageable
         Anim.SetBool("Dash", _isDashing);
 
         
+        if (_isFiring)
+        {
+             Anim.SetTrigger("Shot");
+            _isFiring = false;
+        }
+        
+
+
     }
 }
