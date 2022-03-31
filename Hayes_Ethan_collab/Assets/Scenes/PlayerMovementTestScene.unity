@@ -182,6 +182,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerModel
       objectReference: {fileID: 0}
+    - target: {fileID: 3748359892381204692, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748359892381204692, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748359892381204692, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748359892381204692, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
 --- !u!1 &476433660
@@ -446,10 +462,10 @@ MonoBehaviour:
   ForwardSpeed: 12
   SidewaysSpeed: 9
   Gravity: 9.81
-  DashSpeed: 25
-  DashTime: 0.2
+  DashSpeed: 18
+  DashTime: 0.65
   InvincibilityTime: 0.3
-  DashCooldown: 2
+  DashCooldown: 1
   BulletSpawn: {fileID: 1975488030}
   Shot: {fileID: 6671374649850836924, guid: b98636a666c48d34ea39cb0ebe4bd862, type: 3}
   ChargeShot: {fileID: 6671374649850836924, guid: 51b206d660c154b64ae9c79cb7c57580, type: 3}
@@ -462,9 +478,6 @@ MonoBehaviour:
   ChargeShotCoolDown: 1
   Anim: {fileID: 1422802007}
   PlayerModel: {fileID: 1422802006}
-  _isWalking: 0
-  _hInput: 0
-  _vInput: 0
 --- !u!136 &927105711
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -802,7 +815,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1516027772}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
@@ -814,7 +827,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1516027772}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1067,7 +1080,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720723009}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88be7b71c0d814a44b98a2e33590eb37, type: 3}
   m_Name: 
@@ -1101,7 +1114,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720723009}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

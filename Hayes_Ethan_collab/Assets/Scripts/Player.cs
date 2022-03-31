@@ -44,6 +44,7 @@ public class Player : Damageable
     // private stuff
     private Rigidbody _rb;
     private float _hInput, _vInput;
+    private float _lockedHInput, _lockedVInput;
     private Vector3 _direction;
     private bool _isDashing;
     private float _dashStartTime, _dashEndTime;
@@ -81,6 +82,8 @@ public class Player : Damageable
         if(_dashButton && !_isDashing && Time.time-_dashEndTime >= DashCooldown){
             _isDashing = true;
             Invincible = true;
+            _lockedHInput = _hInput;
+            _lockedVInput = _vInput;
             _dashStartTime = Time.time;
         }
         if(Time.time-_dashStartTime >= InvincibilityTime){
@@ -89,6 +92,10 @@ public class Player : Damageable
         if(_isDashing & Time.time-_dashStartTime >= DashTime){
             _isDashing = false;
             _dashEndTime = Time.time;
+        }
+        if(_isDashing){
+            _hInput = _lockedHInput;
+            _vInput = _lockedVInput;
         }
 
         // set player velocity
