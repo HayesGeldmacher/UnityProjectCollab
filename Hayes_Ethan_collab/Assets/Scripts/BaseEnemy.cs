@@ -2,17 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class BaseEnemy : Damageable
 {
     
     public List<EnemyAttackInfo> Attacks;
 
+
+    private Rigidbody _rb;
     private GameObject _player;
     private List<EnemyAttackInfo> _triggeredAttackPool;
     private float _cooldownTimer, _cooldownLength;
     private bool _attacking;
 
     void Start(){
+        _rb = GetComponent<Rigidbody>();
+        _rb.useGravity = false;
+        _rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+        
         _player = GameObject.FindGameObjectWithTag("Player");
         _triggeredAttackPool = new List<EnemyAttackInfo>();
 
@@ -20,7 +28,14 @@ public class BaseEnemy : Damageable
     }
 
     void Update(){
+        UpdateRotation();
         UpdateAttack();
+    }
+
+    private void UpdateRotation(){
+        Vector3 gravityUp = transform.position.normalized;
+		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
+        _rb.AddForce(transform.position.normalized*-9.81f);
     }
 
     private void UpdateAttack(){
