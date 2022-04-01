@@ -28,17 +28,25 @@ public class BaseEnemy : Damageable
         if(_attacking || _cooldownTimer > 0)
             return;
 
-        _triggeredAttackPool.Clear();
-        foreach(EnemyAttackInfo a in Attacks){
-            if(a.Trigger.Triggered(0f))
-                for(int i = 0; i < a.Trigger.Priority; i++)
-                    _triggeredAttackPool.Add(a);
-
-        EnemyAttackInfo chosenAttack = _triggeredAttackPool[Random.Range(0,_triggeredAttackPool.Count)];
+        EnemyAttackInfo chosenAttack = ChooseAttack();
+        if(chosenAttack == null)
+            return;
         SpawnAttack(chosenAttack);
-        }
+        
     }
 
+    private EnemyAttackInfo ChooseAttack(){
+        _triggeredAttackPool.Clear();
+        foreach(EnemyAttackInfo a in Attacks){
+            float distance = Vector3.Distance(_player.transform.position, transform.position);
+            if(a.Trigger.Triggered(distance))
+                for(int i = 0; i < a.Trigger.Priority; i++)
+                    _triggeredAttackPool.Add(a);
+        }
+        if(_triggeredAttackPool.Count <= 0)
+            return null;
+        return _triggeredAttackPool[Random.Range(0,_triggeredAttackPool.Count)];
+    }
     private void SpawnAttack(EnemyAttackInfo attack){
         // TODO: do this method right
         Attack attackClone = Instantiate(attack.Attack, transform);
@@ -48,6 +56,16 @@ public class BaseEnemy : Damageable
             _attacking = false;
             _cooldownTimer = attack.Cooldown;
         };
+    }
+
+    void OnDrawGizmosSelected(){
+        Gizmos.color = new Color(0,0,1,.2f);
+        foreach(EnemyAttackInfo attack in Attacks){
+            if(!attack.Trigger.Proximity)
+                continue;
+            Gizmos.DrawSphere(transform.position, attack.Trigger.MinTriggerRadius);
+            Gizmos.DrawSphere(transform.position, attack.Trigger.MaxTriggerRadius);
+        }
     }
 }
 
@@ -59,13 +77,11 @@ public class AttackTrigger{
     public float MinTriggerRadius;
     public float MaxTriggerRadius;
     public bool Triggered(float distance){
-        return true;
-        // // TODO: huge bug with triggering attacks
-        // if(AlwaysTriggered)
-        //     return true;
-        // if(Proximity)
-        //     return MinTriggerRadius <= distance && distance <= MaxTriggerRadius;
-        // return false;
+        if(AlwaysTriggered)
+            return true;
+        if(Proximity)
+            return MinTriggerRadius <= distance && distance <= MaxTriggerRadius;
+        return false;
     }
 }
 

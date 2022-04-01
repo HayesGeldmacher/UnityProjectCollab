@@ -10,12 +10,17 @@ public class Attack : MonoBehaviour
     public AttackSpawn[] AttackSpawns;
     public AttackInfo[] Projectiles;
 
+    private Transform _player;
     private Dictionary<string, AttackSpawn> _attackSpawnLookup;
     private float[] _projectileCooldowns;
-    public int[] _timesFired;
+    private int[] _timesFired;
     void Start(){
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
         InitLookup();
         InitCooldowns();
+        foreach(AttackSpawn spawn in AttackSpawns)
+            if(spawn.TrackPlayer)
+                spawn.SpawnTransform.LookAt(_player.transform);
     }
 
     void InitLookup(){
@@ -53,15 +58,15 @@ public class Attack : MonoBehaviour
     void UpdateAttackSpawns(){
         foreach(AttackSpawn spawn in AttackSpawns){
             if(spawn.TrackPlayer){
-
+                Vector3 towardPlayer = _player.position - spawn.SpawnTransform.position;
+                Quaternion desiredRotation = Quaternion.FromToRotation(spawn.SpawnTransform.forward, towardPlayer)*spawn.SpawnTransform.rotation;
+                spawn.SpawnTransform.rotation = Quaternion.RotateTowards(spawn.SpawnTransform.rotation, desiredRotation, spawn.PlayerTrackStrength*Time.deltaTime);
             }else
                 spawn.SpawnTransform.Rotate(spawn.RotationSpeed * Time.deltaTime);
         }
     }
 
     void UpdateProjectiles(){
-        if(!Triggered())
-            return;
         for(int i = 0; i < Projectiles.Length; i++)
             if(_projectileCooldowns[i] <= 0 && _timesFired[i]<Projectiles[i].Repeats){
                 SpawnProjectile(Projectiles[i]);
@@ -80,11 +85,6 @@ public class Attack : MonoBehaviour
             Destroy(shot, proj.DespawnTime);
         }
 
-    }
-
-    public bool Triggered(){
-        // TODO: trigger logic
-        return true;
     }
 }
 
