@@ -24,12 +24,14 @@ public class Attack : MonoBehaviour
     }
 
     void InitLookup(){
+        // creates lookup for attack spawns given their name
         _attackSpawnLookup = new Dictionary<string, AttackSpawn>();
         foreach(AttackSpawn spawn in AttackSpawns)
             _attackSpawnLookup.Add(spawn.Name, spawn);
     }
 
     void InitCooldowns(){
+        // sets the predelay for all projectiles
         _timesFired = new int[Projectiles.Length];
 
         _projectileCooldowns = new float[Projectiles.Length];
@@ -45,9 +47,21 @@ public class Attack : MonoBehaviour
         UpdateAttackSpawns();
         UpdateProjectiles();
     }
+    
+    public void OverrideAttackSpawns(Dictionary<string, EnemyAttackSpawn> enemyLookup){
+        // TODO: if this is ever a problem being O(n^2) then refactor this but this is the only way i could get to work
+        foreach(string name in enemyLookup.Keys)
+            foreach(AttackSpawn spawn in AttackSpawns)
+                if(spawn.Name == name)
+                    spawn.SpawnTransform = enemyLookup[name].SpawnTransform;
+
+        InitLookup();
+    }
 
     private void CheckFinished(){
         // TODO: update this to take into account things like lazers and despawn time
+
+        // if all projectiles have fired as many times as their supposed to then call the event
         for(int i = 0; i < Projectiles.Length; i++)
             if(Projectiles[i].Repeats != _timesFired[i])
                 return;
@@ -57,16 +71,19 @@ public class Attack : MonoBehaviour
 
     void UpdateAttackSpawns(){
         foreach(AttackSpawn spawn in AttackSpawns){
+            // tracks the spawn transform to point forward towards player
             if(spawn.TrackPlayer){
                 Vector3 towardPlayer = _player.position - spawn.SpawnTransform.position;
                 Quaternion desiredRotation = Quaternion.FromToRotation(spawn.SpawnTransform.forward, towardPlayer)*spawn.SpawnTransform.rotation;
                 spawn.SpawnTransform.rotation = Quaternion.RotateTowards(spawn.SpawnTransform.rotation, desiredRotation, spawn.PlayerTrackStrength*Time.deltaTime);
+            // handles spawn transform rotation when not tracking player
             }else
                 spawn.SpawnTransform.Rotate(spawn.RotationSpeed * Time.deltaTime);
         }
     }
 
     void UpdateProjectiles(){
+        // checks to fire all projectiles based on their cool down and how many have already been fired
         for(int i = 0; i < Projectiles.Length; i++)
             if(_projectileCooldowns[i] <= 0 && _timesFired[i]<Projectiles[i].Repeats){
                 SpawnProjectile(Projectiles[i]);
@@ -77,11 +94,11 @@ public class Attack : MonoBehaviour
     }
 
     void SpawnProjectile(AttackInfo proj){
-        foreach(string spawn in proj.AttackSpawnNames){
-            GameObject shot = Instantiate(proj.Shot, _attackSpawnLookup[spawn].SpawnTransform);
+        // spawn the proj in all of its spawns
+        foreach(string name in proj.AttackSpawnNames){
+            GameObject shot = Instantiate(proj.Shot, _attackSpawnLookup[name].SpawnTransform);
             if(!proj.LockToSpawn)
                 shot.transform.parent = null;
-            // TODO: deparent, variable destroy times
             Destroy(shot, proj.DespawnTime);
         }
 
