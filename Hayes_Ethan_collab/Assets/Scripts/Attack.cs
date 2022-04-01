@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
+    public delegate void AttackFinishHandler();
+    public AttackFinishHandler OnAttackFinish;
+
     public AttackSpawn[] AttackSpawns;
     public AttackInfo[] Projectiles;
-    public AttackTrigger Triggers;
-
 
     private Dictionary<string, AttackSpawn> _attackSpawnLookup;
     private float[] _projectileCooldowns;
-    private int[] _timesFired;
+    public int[] _timesFired;
     void Start(){
         InitLookup();
         InitCooldowns();
@@ -35,8 +36,18 @@ public class Attack : MonoBehaviour
     void Update(){
         for(int i = 0; i < Projectiles.Length; i++)
             _projectileCooldowns[i] -= Time.deltaTime;
+        CheckFinished();
         UpdateAttackSpawns();
         UpdateProjectiles();
+    }
+
+    private void CheckFinished(){
+        // TODO: update this to take into account things like lazers and despawn time
+        for(int i = 0; i < Projectiles.Length; i++)
+            if(Projectiles[i].Repeats != _timesFired[i])
+                return;
+        OnAttackFinish();
+        Destroy(gameObject);
     }
 
     void UpdateAttackSpawns(){
@@ -95,20 +106,4 @@ public class AttackInfo{
     public float TimeBetweenShots;
     public float DespawnTime;
     public bool LockToSpawn;
-}
-
-[System.Serializable]
-public class AttackTrigger{
-    public bool AlwaysTriggered;
-    public bool Proximity;
-    public float MinTriggerRadius;
-    public float MaxTriggerRadius;
-    public bool Triggered(float distance){
-        // TODO: huge bug with triggering attacks
-        if(AlwaysTriggered)
-            return true;
-        if(Proximity)
-            return MinTriggerRadius <= distance && distance <= MaxTriggerRadius;
-        return false;
-    }
 }

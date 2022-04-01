@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class AreaAttack : MonoBehaviour
+public class AOEProjectile : MonoBehaviour
 {
     [Header("Area Attack")]
     public float Damage;

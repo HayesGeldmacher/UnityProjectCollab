@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class BaseEnemy : Damageable
 {
-    public List<Attack> Attacks;
+    
+    public List<EnemyAttackInfo> Attacks;
 
     private GameObject _player;
-    private List<Attack> _triggeredAttackPool;
-    private Attack _chosenAttack;
-    private float _cooldownTimer;
+    private List<EnemyAttackInfo> _triggeredAttackPool;
+    private float _cooldownTimer, _cooldownLength;
+    private bool _attacking;
 
     void Start(){
         _player = GameObject.FindGameObjectWithTag("Player");
-        _triggeredAttackPool = new List<Attack>();
+        _triggeredAttackPool = new List<EnemyAttackInfo>();
 
         OnDeath += () => Destroy(this.gameObject);
     }
@@ -23,74 +24,55 @@ public class BaseEnemy : Damageable
     }
 
     private void UpdateAttack(){
-        // if(_chosenAttack != null && _chosenAttack.TrackPlayerStrength != 0){
-        //     Quaternion currentRotation = _chosenAttack.AttackSpawn.rotation;
-        //     Vector3 direction = _player.transform.position - transform.position;
-        //     Quaternion desiredRotation = Quaternion.FromToRotation(_chosenAttack.AttackSpawn.forward, direction) * _chosenAttack.AttackSpawn.rotation;
-            
-        //     _chosenAttack.AttackSpawn.rotation = Quaternion.Slerp(currentRotation, desiredRotation, _chosenAttack.TrackPlayerStrength/100);
-        // }
-            
+        _cooldownTimer -= Time.deltaTime;
+        if(_attacking || _cooldownTimer > 0)
+            return;
 
-        // _cooldownTimer -= Time.deltaTime;
-        // if(_cooldownTimer > 0)
-        //     return;
+        _triggeredAttackPool.Clear();
+        foreach(EnemyAttackInfo a in Attacks){
+            if(a.Trigger.Triggered(0f))
+                for(int i = 0; i < a.Trigger.Priority; i++)
+                    _triggeredAttackPool.Add(a);
 
-        // _triggeredAttackPool.Clear();
-
-        // float distance = Vector3.Distance(_player.transform.position, transform.position);
-        // foreach(Attack attack in Attacks)
-        //     if(attack.Trigger.Triggered(distance))
-        //         for(int i = 0; i < attack.Priority; i++)
-        //             _triggeredAttackPool.Add(attack);
-        //     else
-        //         Debug.Log("no trigger");
-
-        // if(_triggeredAttackPool.Count != 0) {
-        //     _chosenAttack = Attacks[Random.Range(0,Attacks.Count)];
-        //     if(_chosenAttack.PointTowardsPlayer)
-        //         _chosenAttack.AttackSpawn.LookAt(_player.transform);
-        //     GameObject a = Instantiate(_chosenAttack.AttackPrefab, _chosenAttack.AttackSpawn);
-        //     if(_chosenAttack.TrackPlayerStrength == 0)
-        //         a.transform.SetParent(null);
-        //     _cooldownTimer = _chosenAttack.Cooldown;
-        // }
+        EnemyAttackInfo chosenAttack = _triggeredAttackPool[Random.Range(0,_triggeredAttackPool.Count)];
+        SpawnAttack(chosenAttack);
+        }
     }
 
-    // void OnDrawGizmosSelected(){
-    //     Gizmos.color = new Color(1,0,0,.2f);
-    //     foreach(Attack attack in Attacks) {
-    //         Gizmos.DrawSphere(transform.position, attack.Trigger.MinTriggerRadius);
-    //         Gizmos.DrawSphere(transform.position, attack.Trigger.MaxTriggerRadius);
-    //     }
-    // }
+    private void SpawnAttack(EnemyAttackInfo attack){
+        // TODO: do this method right
+        Attack attackClone = Instantiate(attack.Attack, transform);
+        _attacking = true;
+        attackClone.OnAttackFinish += () => {
+            Debug.Log("ATTACK FINISHED");
+            _attacking = false;
+            _cooldownTimer = attack.Cooldown;
+        };
+    }
 }
 
+[System.Serializable]
+public class AttackTrigger{
+    public int Priority = 1;
+    public bool AlwaysTriggered;
+    public bool Proximity;
+    public float MinTriggerRadius;
+    public float MaxTriggerRadius;
+    public bool Triggered(float distance){
+        return true;
+        // // TODO: huge bug with triggering attacks
+        // if(AlwaysTriggered)
+        //     return true;
+        // if(Proximity)
+        //     return MinTriggerRadius <= distance && distance <= MaxTriggerRadius;
+        // return false;
+    }
+}
 
-/**
-
-CURRENT SYSTEM FOR TRIGGERING ATTACKS
-
-AttackPrefab - the prefab for ur attack duh
-
-AttackSpawn - where to instantiate the prefab
-
-PointTowardsPlayer - if checked, points the AttackSpawn transform towards player before attacking
-
-Cooldown - how many seconds has to wait after completing this attack
-
-Priority - if multiple attacks can be triggered to fire, this determines which one is fired.
-           attack with 2 priority is twice more likely to fire than attack with 1 priority.
-           attack with 3 priority is thrice more likely to fire than attack with 3 priority.
-           etc.
-
-TRIGGERS
-
-AlwaysTriggered - always available to use this attack
-
-Proximity - this attack can only be used if the player is within the min and max radius specified.
-
-**/
-
-
+[System.Serializable]
+public class EnemyAttackInfo{
+    public Attack Attack;
+    public float Cooldown;
+    public AttackTrigger Trigger;
+}
 
