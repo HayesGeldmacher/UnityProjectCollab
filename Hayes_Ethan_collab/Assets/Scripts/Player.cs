@@ -56,6 +56,7 @@ public class Player : Damageable
     private float _coolDownTime;
     //private bool for Fire animation, sets to true in FireShot()
     private bool _isFiring;
+    private bool _isHeavyFiring;
 
 
     void Start()
@@ -189,6 +190,7 @@ public class Player : Damageable
 
     void FireChargeShot(float timeCharged)
     {
+        _isHeavyFiring = true;
         GameObject shot = Instantiate(ChargeShot, BulletSpawn); // create shot
         Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
@@ -204,19 +206,24 @@ public class Player : Damageable
 
         _isWalking = (Mathf.Abs(_vInput) > 0.1 || Mathf.Abs(_hInput) > 0.1);
 
-        // if we have more animations in the future, might be useful to use integer instead of bool
-
+       
         Anim.SetBool("Walking", _isWalking);
         Anim.SetBool("Dash", _isDashing);
+       
+        //doesnt enter charge animation when firing in quick succession
+        if(_chargeTime > 0.2f)
+            Anim.SetBool("isCharging", _isCharging);
 
-        
         if (_isFiring)
         {
              Anim.SetTrigger("Shot");
             _isFiring = false;
         }
-        
 
-
+        if (_isHeavyFiring)
+        {
+            Anim.SetTrigger("HeavyShot");
+            _isHeavyFiring = false;
+        }
     }
 }
