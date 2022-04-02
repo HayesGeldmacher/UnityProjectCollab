@@ -211,7 +211,7 @@ public class Player : Damageable
         Anim.SetBool("Dash", _isDashing);
        
         //doesnt enter charge animation when firing in quick succession
-        if(_chargeTime > 0.2f)
+        if(_chargeTime > MinChargeTime)
             Anim.SetBool("isCharging", _isCharging);
 
         if (_isFiring)
