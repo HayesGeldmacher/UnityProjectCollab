@@ -182,7 +182,7 @@ public class Player : Damageable
         Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
         shot.transform.localScale = scale;
-        shot.GetComponent<Projectile>().Damage = ShotDamage; // set damage of shot
+        shot.GetComponent<Shot>().Damage = ShotDamage; // set damage of shot
         Destroy(shot, ShotDespawnTime); // destroy it for performance reasons
         _coolDownTime = ShotCoolDown; // update cooldown so no new rapid shots
         
@@ -197,7 +197,7 @@ public class Player : Damageable
         shot.transform.localScale = scale;
         // percentage of charge * damage for charged shot
         float damage = timeCharged / MaxChargeTime * ChargeShotDamage;
-        shot.GetComponent<Projectile>().Damage = damage;// set damage of shot
+        shot.GetComponent<Shot>().Damage = damage;// set damage of shot
         Destroy(shot, ShotDespawnTime);// destroy it for performance reasons
         _coolDownTime = ChargeShotCoolDown;// update cooldown so no new rapid shots
     }

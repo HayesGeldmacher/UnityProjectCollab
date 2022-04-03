@@ -799,6 +799,71 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!1001 &1061233326
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1567394412574569587, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_Name
+      value: LAZER!!!
+      objectReference: {fileID: 0}
+    - target: {fileID: 4914910810332980194, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: Damage
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4914910810332980194, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: OnlyDamageOnce
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.83
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -24.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5807660675676651090, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5fd633b38add6f5488e92a4c6803b67a, type: 3}
 --- !u!1 &1211822204
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,7 +1266,8 @@ MonoBehaviour:
   Invincible: 0
   AttackSpawns: []
   Attacks:
-  - Attack: {fileID: 4003331276579949913, guid: 824cb69bc5a182d48829fcf002b5fee4, type: 3}
+  - AnimationTrigger: 
+    Attack: {fileID: 4003331276579949913, guid: 824cb69bc5a182d48829fcf002b5fee4, type: 3}
     Cooldown: 1
     Trigger:
       Priority: 1
@@ -1209,7 +1275,8 @@ MonoBehaviour:
       Proximity: 1
       MinTriggerRadius: 5.3
       MaxTriggerRadius: 8
-  - Attack: {fileID: 6356009184006626022, guid: 947f66f823e99ed4fa7094efaf77b4f9, type: 3}
+  - AnimationTrigger: 
+    Attack: {fileID: 6356009184006626022, guid: 947f66f823e99ed4fa7094efaf77b4f9, type: 3}
     Cooldown: 0.5
     Trigger:
       Priority: 1

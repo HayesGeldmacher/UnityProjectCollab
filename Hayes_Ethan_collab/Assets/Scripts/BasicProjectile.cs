@@ -3,25 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class Projectile : MonoBehaviour
+public class BasicProjectile : Shot
 {
     [Header("Projectile")]
-    public float Damage;
     public float Speed;
     public bool SeekPlayer;
     public float SeekStrength;
-
-    [Header("Layer Mask")]
-    public LayerMask CanHit;
-
-    public delegate void HitHandler(GameObject hit);
-    public event HitHandler OnHit;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        OnHit += Hit;
-    }
 
     // Update is called once per frame
     void Update()
@@ -40,20 +27,8 @@ public class Projectile : MonoBehaviour
         transform.Translate(Vector3.forward * Speed * Time.deltaTime);
     }
 
-    private void Hit(GameObject hit)
-    {
-        if (hit.TryGetComponent<Damageable>(out Damageable d))
-            if(d.Damage(Damage))
-                Destroy(gameObject);
-            else
-                Debug.Log("INVINCIBLE");
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        // I think this does stuff with layer masks to check if the thing hit is in it
-        if (CanHit == (CanHit | (1 << other.gameObject.layer)))
-            if(OnHit != null)
-                OnHit(other.gameObject);
+        OnHit(other.gameObject);
     }
 }
