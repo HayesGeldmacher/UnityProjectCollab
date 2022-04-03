@@ -29,6 +29,7 @@ public class BasicProjectile : Shot
 
     private void OnTriggerEnter(Collider other)
     {
-        OnHit(other.gameObject);
+        if(InLayerMask(other.gameObject))
+            OnHit(other.gameObject);
     }
 }

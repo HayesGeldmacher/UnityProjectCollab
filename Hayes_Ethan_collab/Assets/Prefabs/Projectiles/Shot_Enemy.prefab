@@ -109,9 +109,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 5
-  Speed: 5
-  SeekPlayer: 0
-  SeekStrength: 0
+  DestroyOnHit: 1
   CanHit:
     serializedVersion: 2
     m_Bits: 8
+  Speed: 5
+  SeekPlayer: 0
+  SeekStrength: 0

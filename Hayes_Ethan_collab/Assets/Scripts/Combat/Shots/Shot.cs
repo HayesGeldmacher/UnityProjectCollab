@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class Shot : MonoBehaviour
 {
     public float Damage;
+    public bool DestroyOnHit;
 
     [Header("Layer Mask")]
     public LayerMask CanHit;
@@ -14,9 +15,14 @@ public abstract class Shot : MonoBehaviour
     public HitHandler OnHit;
 
     private void Hit(GameObject other){
-        if (CanHit == (CanHit | (1 << other.gameObject.layer)))
-            if(other.TryGetComponent<Damageable>(out Damageable d))
-                d.Damage(Damage);
+        if(other.TryGetComponent<Damageable>(out Damageable d))
+            d.Damage(Damage);
+        if(DestroyOnHit)
+            Destroy(gameObject);
+    }
+
+    protected bool InLayerMask(GameObject obj){
+        return CanHit == (CanHit | (1 << obj.gameObject.layer));
     }
 
     public virtual void Awake(){

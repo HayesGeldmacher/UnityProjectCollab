@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -17,11 +18,14 @@ public class BasicAOE : Shot
     }
 
     void Update(){
-        foreach(GameObject key in _timeLastHit.Keys)
+        foreach(GameObject key in _timeLastHit.Keys.ToArray())
             _timeLastHit[key] -= Time.time;
     }
 
     private void OnTriggerStay(Collider other){
+        if(!InLayerMask(other.gameObject))
+            return;
+
         float now = Time.time;
         if(_timeLastHit.TryGetValue(other.gameObject, out float timeLastHit)){
             if(OnlyDamageOnce)
