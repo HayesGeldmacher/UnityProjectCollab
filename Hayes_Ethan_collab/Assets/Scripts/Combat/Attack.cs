@@ -14,10 +14,14 @@ public class Attack : MonoBehaviour
     private Dictionary<string, AttackSpawn> _attackSpawnLookup;
     private float[] _projectileCooldowns;
     private int[] _timesFired;
+    public int _totalProjectiles;
+    public int _numProjectilesSpawned;
     void Awake(){
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         InitLookup();
         InitCooldowns();
+        foreach(AttackInfo shot in Projectiles)
+            _totalProjectiles += shot.AttackSpawnNames.Length*shot.Repeats;
     }
 
     void InitLookup(){
@@ -56,12 +60,9 @@ public class Attack : MonoBehaviour
     }
 
     private void CheckFinished(){
-        // TODO: update this to take into account things like lazers and despawn time
-
         // if all projectiles have fired as many times as their supposed to then call the event
-        for(int i = 0; i < Projectiles.Length; i++)
-            if(Projectiles[i].Repeats != _timesFired[i])
-                return;
+        if(_numProjectilesSpawned != _totalProjectiles)
+            return;
         if(OnAttackFinish != null)
             OnAttackFinish();
         Destroy(gameObject);
@@ -71,6 +72,7 @@ public class Attack : MonoBehaviour
         foreach(AttackSpawn spawn in AttackSpawns){
             // tracks the spawn transform to point forward towards player
             if(spawn.TrackPlayer){
+                // TODO: fix this because i broke it
                 Vector3 towardPlayer = _player.position - spawn.SpawnTransform.position;
                 Quaternion desiredRotation = Quaternion.FromToRotation(spawn.SpawnTransform.forward, towardPlayer)*spawn.SpawnTransform.rotation;
                 spawn.SpawnTransform.rotation = desiredRotation;
@@ -92,12 +94,18 @@ public class Attack : MonoBehaviour
             
     }
 
+    private IEnumerator DecrementSpawnCount(float time){
+        yield return new WaitForSeconds(time);
+        _numProjectilesSpawned++;
+    }
+
     void SpawnProjectile(AttackInfo proj){
         // spawn the proj in all of its spawns
         foreach(string name in proj.AttackSpawnNames){
             GameObject shot = Instantiate(proj.Shot, _attackSpawnLookup[name].SpawnTransform);
             if(!proj.LockToSpawn)
                 shot.transform.parent = null;
+            StartCoroutine(DecrementSpawnCount(proj.DespawnTime));
             Destroy(shot, proj.DespawnTime);
         }
 
