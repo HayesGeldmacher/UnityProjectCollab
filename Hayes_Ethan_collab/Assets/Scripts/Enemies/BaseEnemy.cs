@@ -17,16 +17,19 @@ public class BaseEnemy : Damageable
     public List<EnemyAttackInfo> Attacks;
 
 
-    private Animator _anim;
+    protected Animator _anim;
     private Dictionary<string, EnemyAttackSpawn> _spawnLookup;
-    private Rigidbody _rb;
-    private GameObject _player;
+    protected Rigidbody _rb;
+    protected GameObject _player;
     private List<EnemyAttackInfo> _triggeredAttackPool;
-    private EnemyAttackInfo _chosenAttack;
+    protected EnemyAttackInfo _chosenAttack;
     private float _cooldownTimer, _cooldownLength;
-    private bool _attacking;
+    protected bool _attacking;
 
-    void Start(){
+    protected Vector3 _towardsPlayer;
+    protected float _planeDistanceFromPlayer;
+
+    public virtual void Start(){
         InitLookup();
 
         _rb = GetComponent<Rigidbody>();
@@ -47,7 +50,7 @@ public class BaseEnemy : Damageable
             _spawnLookup.Add(spawn.Name, spawn);
     }
 
-    void Update(){
+    public virtual void Update(){
         UpdateRotation();
         UpdateAttack();
     }
@@ -57,6 +60,12 @@ public class BaseEnemy : Damageable
         Vector3 gravityUp = transform.position.normalized;
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
         _rb.AddForce(transform.position.normalized*-9.81f);
+
+        Vector3 playerInLocal = transform.InverseTransformPoint(_player.transform.position);
+        _towardsPlayer = new Vector3(playerInLocal.x, 0, playerInLocal.z).normalized;
+
+        Vector3 p = transform.InverseTransformPoint(_player.transform.position);
+        _planeDistanceFromPlayer = Mathf.Sqrt(p.x*p.x + p.z*p.z);
     }
 
     private void UpdateAttack(){

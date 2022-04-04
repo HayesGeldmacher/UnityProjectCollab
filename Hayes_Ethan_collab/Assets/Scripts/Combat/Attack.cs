@@ -14,13 +14,10 @@ public class Attack : MonoBehaviour
     private Dictionary<string, AttackSpawn> _attackSpawnLookup;
     private float[] _projectileCooldowns;
     private int[] _timesFired;
-    void Start(){
+    void Awake(){
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         InitLookup();
         InitCooldowns();
-        foreach(AttackSpawn spawn in AttackSpawns)
-            if(spawn.TrackPlayer)
-                spawn.SpawnTransform.LookAt(_player.transform);
     }
 
     void InitLookup(){
@@ -54,8 +51,8 @@ public class Attack : MonoBehaviour
             foreach(AttackSpawn spawn in AttackSpawns)
                 if(spawn.Name == name)
                     spawn.SpawnTransform = enemyLookup[name].SpawnTransform;
-
         InitLookup();
+        UpdateAttackSpawns();
     }
 
     private void CheckFinished(){
@@ -65,7 +62,8 @@ public class Attack : MonoBehaviour
         for(int i = 0; i < Projectiles.Length; i++)
             if(Projectiles[i].Repeats != _timesFired[i])
                 return;
-        OnAttackFinish();
+        if(OnAttackFinish != null)
+            OnAttackFinish();
         Destroy(gameObject);
     }
 
@@ -75,7 +73,8 @@ public class Attack : MonoBehaviour
             if(spawn.TrackPlayer){
                 Vector3 towardPlayer = _player.position - spawn.SpawnTransform.position;
                 Quaternion desiredRotation = Quaternion.FromToRotation(spawn.SpawnTransform.forward, towardPlayer)*spawn.SpawnTransform.rotation;
-                spawn.SpawnTransform.rotation = Quaternion.RotateTowards(spawn.SpawnTransform.rotation, desiredRotation, spawn.PlayerTrackStrength*Time.deltaTime);
+                spawn.SpawnTransform.rotation = desiredRotation;
+                //spawn.SpawnTransform.rotation = Quaternion.RotateTowards(spawn.SpawnTransform.rotation, desiredRotation, spawn.PlayerTrackStrength*Time.deltaTime);
             // handles spawn transform rotation when not tracking player
             }else
                 spawn.SpawnTransform.Rotate(spawn.RotationSpeed * Time.deltaTime);
@@ -119,8 +118,8 @@ public class AttackInfo{
     public GameObject Shot;
     public string[] AttackSpawnNames;
     public float Predelay;
-    public int Repeats;
+    public int Repeats = 1;
     public float TimeBetweenShots;
-    public float DespawnTime;
+    public float DespawnTime = 1;
     public bool LockToSpawn;
 }

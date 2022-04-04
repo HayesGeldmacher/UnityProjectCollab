@@ -13,11 +13,11 @@ public class BasicAOE : Shot
     private Dictionary<GameObject, float> _timeLastHit;
     private bool _hasHit;
 
-    void Start(){
+    public virtual void Start(){
         _timeLastHit = new Dictionary<GameObject, float>();
     }
 
-    void Update(){
+    public virtual void Update(){
         foreach(GameObject key in _timeLastHit.Keys.ToArray())
             _timeLastHit[key] -= Time.time;
     }
