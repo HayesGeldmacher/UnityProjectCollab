@@ -1273,8 +1273,8 @@ MonoBehaviour:
       Priority: 1
       AlwaysTriggered: 0
       Proximity: 1
-      MinTriggerRadius: 5.3
-      MaxTriggerRadius: 8
+      MinTriggerRadius: 1.2
+      MaxTriggerRadius: 6
   - AnimationTrigger: 
     Attack: {fileID: 6356009184006626022, guid: 947f66f823e99ed4fa7094efaf77b4f9, type: 3}
     Cooldown: 0.5
@@ -1282,8 +1282,8 @@ MonoBehaviour:
       Priority: 1
       AlwaysTriggered: 0
       Proximity: 1
-      MinTriggerRadius: 8
-      MaxTriggerRadius: 15
+      MinTriggerRadius: 6
+      MaxTriggerRadius: 12
 --- !u!136 &1720723011
 CapsuleCollider:
   m_ObjectHideFlags: 0

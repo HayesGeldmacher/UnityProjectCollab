@@ -16,9 +16,8 @@ public abstract class Shot : MonoBehaviour
 
     private void Hit(GameObject other){
         if(other.TryGetComponent<Damageable>(out Damageable d))
-            d.Damage(Damage);
-        if(DestroyOnHit)
-            Destroy(gameObject);
+            if(d.Damage(Damage) && DestroyOnHit)
+                Destroy(gameObject);
     }
 
     protected bool InLayerMask(GameObject obj){

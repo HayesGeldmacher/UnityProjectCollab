@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 /**
 
@@ -103,12 +104,14 @@ public class BaseEnemy : Damageable
 
     void OnDrawGizmosSelected(){
         // draws spheres in editor to view trigger radiussies
-        Gizmos.color = new Color(0,0,1,.2f);
+        Handles.color = new Color(0,0,1,.2f);
         foreach(EnemyAttackInfo attack in Attacks){
             if(!attack.Trigger.Proximity)
                 continue;
-            Gizmos.DrawSphere(transform.position, attack.Trigger.MinTriggerRadius);
-            Gizmos.DrawSphere(transform.position, attack.Trigger.MaxTriggerRadius);
+            Handles.DrawWireDisc(transform.position, transform.up, attack.Trigger.MinTriggerRadius);
+            Handles.DrawWireDisc(transform.position, transform.up, attack.Trigger.MaxTriggerRadius);
+            //Gizmos.DrawSphere(transform.position, attack.Trigger.MinTriggerRadius);
+            //Gizmos.DrawSphere(transform.position, attack.Trigger.MaxTriggerRadius);
         }
     }
 }
