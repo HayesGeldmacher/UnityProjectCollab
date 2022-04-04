@@ -53,8 +53,10 @@ MonoBehaviour:
   - Shot: {fileID: 1723039840968076415, guid: 34b47afb0b235554b96a6ecc31630f80, type: 3}
     AttackSpawnNames:
     - base
-    Predelay: 0
+    Predelay: 1
     Repeats: 1
     TimeBetweenShots: 0
-    DespawnTime: 3
+    DespawnTime: 1.5
     LockToSpawn: 0
+  _totalProjectiles: 0
+  _numProjectilesSpawned: 0

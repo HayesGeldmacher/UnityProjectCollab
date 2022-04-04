@@ -5,6 +5,8 @@ using UnityEngine;
 public class SpiderThingEnemy : BaseEnemy
 {
     public float Speed;
+    public float SeekRadius;
+    public float FleeRadius;
     public override void Start()
     {
      base.Start();   
@@ -20,10 +22,11 @@ public class SpiderThingEnemy : BaseEnemy
 
     void UpdateMovement(){
         float speed;
-        if(_planeDistanceFromPlayer >= 5)
+        if(_planeDistanceFromPlayer >= SeekRadius)
             speed = Speed;
-        else
-            speed = -Speed;
+        else if(_planeDistanceFromPlayer <= FleeRadius)
+            speed = -1.33f*Speed;
+        else speed = 0;
         
         Vector3 oldVel = _rb.velocity;
         Vector3 newVel =  (transform.right*_towardsPlayer.x + transform.forward*_towardsPlayer.z)*speed;
