@@ -7,28 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Collar
-    second: {fileID: 2100000, guid: 679d93aa95d6d674489915f5fa92f729, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Mouth
-    second: {fileID: 2100000, guid: dd387a3b9521b514c935f58a539ef620, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: hat
-    second: {fileID: 2100000, guid: a169910bc9e8d4646ab5a911ab5094f4, type: 2}
+      name: Eyeball
+    second: {fileID: 2100000, guid: 9bc103570d29cb745957064a4cafc9eb, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: pincers
-    second: {fileID: 2100000, guid: 8daed435b647e9b41927beb0b0027459, type: 2}
+    second: {fileID: 2100000, guid: 819076145cec96049961ec3ebc8cd467, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: skull
-    second: {fileID: 2100000, guid: 6df60d14e02ecf645a1d4693d1df556f, type: 2}
+    second: {fileID: 2100000, guid: dd97a96a4c0225a4c8387e8e1703ff54, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
