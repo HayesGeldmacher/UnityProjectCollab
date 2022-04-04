@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8022128953419533950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9612122, y: 13.012246, z: -6.67}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -57,6 +57,14 @@ MonoBehaviour:
     Repeats: 1
     TimeBetweenShots: 0
     DespawnTime: 1.5
+    LockToSpawn: 0
+  - Shot: {fileID: 731476279744359611, guid: fa6655f9e72220943ad192fd6acefcf5, type: 3}
+    AttackSpawnNames:
+    - base
+    Predelay: 0
+    Repeats: 1
+    TimeBetweenShots: 0
+    DespawnTime: 1
     LockToSpawn: 0
   _totalProjectiles: 0
   _numProjectilesSpawned: 0

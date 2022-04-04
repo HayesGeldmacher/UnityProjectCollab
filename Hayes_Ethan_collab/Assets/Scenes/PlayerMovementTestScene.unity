@@ -691,12 +691,12 @@ MonoBehaviour:
   Attacks:
   - AnimationTrigger: lazer
     Attack: {fileID: 8022128953419533937, guid: 548e779963ad0df41be169612f4c1821, type: 3}
-    Cooldown: 5
+    Cooldown: 3
     Trigger:
       Priority: 1
       AlwaysTriggered: 0
       Proximity: 1
-      MinTriggerRadius: 3
+      MinTriggerRadius: 4
       MaxTriggerRadius: 7
   Speed: 5
   SeekRadius: 5.5
