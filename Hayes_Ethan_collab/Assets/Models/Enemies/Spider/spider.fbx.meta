@@ -12,11 +12,6 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Mouth
-    second: {fileID: 2100000, guid: 6a1d3bffa6733fb45bd1a925d7ce39f9, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
       name: pincers
     second: {fileID: 2100000, guid: 819076145cec96049961ec3ebc8cd467, type: 2}
   - first:
