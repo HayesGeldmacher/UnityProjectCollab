@@ -831,7 +831,7 @@ MonoBehaviour:
   Health: 100
   Invincible: 1
   ForwardSpeed: 9
-  SidewaysSpeed: 6
+  SidewaysSpeed: 9
   Gravity: 9.81
   DashSpeed: 12
   DashTime: 0.5

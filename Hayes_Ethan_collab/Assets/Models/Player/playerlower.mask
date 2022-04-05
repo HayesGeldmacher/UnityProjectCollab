@@ -32,7 +32,7 @@ AvatarMask:
   - m_Path: Armature/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L
     m_Weight: 0
   - m_Path: Armature/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/LowerArm.L_end
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Armature/Hips/Spine/Chest/Shoulder.R
     m_Weight: 0
   - m_Path: Armature/Hips/Spine/Chest/Shoulder.R/UpperArm.R
