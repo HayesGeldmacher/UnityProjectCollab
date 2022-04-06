@@ -114,9 +114,11 @@ public class Player : Damageable
         // set player velocity
         if(!_isDashing){
             _direction = transform.forward*_vInput*ForwardSpeed+transform.right*_hInput*SidewaysSpeed;
+            if(_direction.magnitude > ForwardSpeed)
+                _direction = _direction.normalized*ForwardSpeed;
             _rb.velocity = _direction;
         }else{
-            _direction = transform.forward*_vInput+transform.right*_hInput;
+            _direction = (transform.forward*_vInput+transform.right*_hInput).normalized;
             _rb.velocity = _direction * DashSpeed;
         }
 
