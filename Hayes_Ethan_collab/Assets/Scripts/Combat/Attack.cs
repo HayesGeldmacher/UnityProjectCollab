@@ -14,10 +14,12 @@ public class Attack : MonoBehaviour
     private Dictionary<string, AttackSpawn> _attackSpawnLookup;
     private float[] _projectileCooldowns;
     private int[] _timesFired;
+    private List<GameObject> _projectileObjects;
     public int _totalProjectiles;
     public int _numProjectilesSpawned;
     void Awake(){
         _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _projectileObjects = new List<GameObject>();
         InitLookup();
         InitCooldowns();
         foreach(AttackInfo shot in Projectiles)
@@ -75,8 +77,8 @@ public class Attack : MonoBehaviour
                 // TODO: fix this because i broke it
                 Vector3 towardPlayer = _player.position - spawn.SpawnTransform.position;
                 Quaternion desiredRotation = Quaternion.FromToRotation(spawn.SpawnTransform.forward, towardPlayer)*spawn.SpawnTransform.rotation;
-                spawn.SpawnTransform.rotation = desiredRotation;
-                //spawn.SpawnTransform.rotation = Quaternion.RotateTowards(spawn.SpawnTransform.rotation, desiredRotation, spawn.PlayerTrackStrength*Time.deltaTime);
+                //spawn.SpawnTransform.rotation = desiredRotation;
+                spawn.SpawnTransform.rotation = Quaternion.RotateTowards(spawn.SpawnTransform.rotation, desiredRotation, spawn.PlayerTrackStrength*Time.deltaTime);
             // handles spawn transform rotation when not tracking player
             }else
                 spawn.SpawnTransform.Rotate(spawn.RotationSpeed * Time.deltaTime);
@@ -103,12 +105,19 @@ public class Attack : MonoBehaviour
         // spawn the proj in all of its spawns
         foreach(string name in proj.AttackSpawnNames){
             GameObject shot = Instantiate(proj.Shot, _attackSpawnLookup[name].SpawnTransform);
+            if(proj.DestroyWithEnemy)
+                _projectileObjects.Add(shot);
             if(!proj.LockToSpawn)
                 shot.transform.parent = null;
             StartCoroutine(DecrementSpawnCount(proj.DespawnTime));
             Destroy(shot, proj.DespawnTime);
         }
+    }
 
+    void OnDestroy(){
+        Debug.Log("DESTROYED");
+        foreach(GameObject obj in _projectileObjects)
+            Destroy(obj);
     }
 }
 
@@ -130,4 +139,5 @@ public class AttackInfo{
     public float TimeBetweenShots;
     public float DespawnTime = 1;
     public bool LockToSpawn;
+    public bool DestroyWithEnemy;
 }

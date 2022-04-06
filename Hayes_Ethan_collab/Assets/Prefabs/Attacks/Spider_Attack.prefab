@@ -47,7 +47,7 @@ MonoBehaviour:
   - Name: base
     SpawnTransform: {fileID: 8022128953419533936}
     TrackPlayer: 1
-    PlayerTrackStrength: 500
+    PlayerTrackStrength: 50
     RotationSpeed: {x: 0, y: 0, z: 0}
   Projectiles:
   - Shot: {fileID: 1723039840968076415, guid: 34b47afb0b235554b96a6ecc31630f80, type: 3}
@@ -57,7 +57,8 @@ MonoBehaviour:
     Repeats: 1
     TimeBetweenShots: 0
     DespawnTime: 1.5
-    LockToSpawn: 0
+    LockToSpawn: 1
+    DestroyWithEnemy: 1
   - Shot: {fileID: 731476279744359611, guid: fa6655f9e72220943ad192fd6acefcf5, type: 3}
     AttackSpawnNames:
     - base
@@ -65,6 +66,7 @@ MonoBehaviour:
     Repeats: 1
     TimeBetweenShots: 0
     DespawnTime: 1
-    LockToSpawn: 0
+    LockToSpawn: 1
+    DestroyWithEnemy: 1
   _totalProjectiles: 0
   _numProjectilesSpawned: 0
