@@ -119,8 +119,6 @@ public class BaseEnemy : Damageable
                 continue;
             Handles.DrawWireDisc(transform.position, transform.up, attack.Trigger.MinTriggerRadius);
             Handles.DrawWireDisc(transform.position, transform.up, attack.Trigger.MaxTriggerRadius);
-            //Gizmos.DrawSphere(transform.position, attack.Trigger.MinTriggerRadius);
-            //Gizmos.DrawSphere(transform.position, attack.Trigger.MaxTriggerRadius);
         }
     }
 }
@@ -138,6 +136,8 @@ public class AttackTrigger{
         if(Proximity){
             // p is the players relative distance from the enemies transform
             Vector3 p = enemy.transform.InverseTransformPoint(player.transform.position);
+            if(p.y<0)
+                return false;
             float distance = Mathf.Sqrt(p.x*p.x + p.z*p.z);
             return MinTriggerRadius <= distance && distance <= MaxTriggerRadius;
         }

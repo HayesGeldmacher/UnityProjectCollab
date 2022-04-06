@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpiderThingEnemy : BaseEnemy
 {
     public float Speed;
+    public float SightDistance;
     public float SeekRadius;
     public float FleeRadius;
     public override void Start()
@@ -21,6 +22,10 @@ public class SpiderThingEnemy : BaseEnemy
     }
 
     void UpdateMovement(){
+        // TODO: fix bug when you are on opposite pole of enemy
+        if(transform.InverseTransformPoint(_player.transform.position).y <= -SightDistance)
+            return;
+
         float speed;
         if(_planeDistanceFromPlayer >= SeekRadius)
             speed = Speed;
