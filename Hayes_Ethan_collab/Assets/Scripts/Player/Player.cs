@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(AudioSource))]
 public class Player : Damageable
 {
     // Public
@@ -15,6 +15,10 @@ public class Player : Damageable
     public float DashTime;
     public float InvincibilityTime;
     public float DashCooldown;
+    [Space(5)]
+    public AudioClip WalkSound;
+    public GameObject DashEffect;
+    public AudioClip DashSound;
     [Space(15)]
     
     [Header("Combat")]
@@ -55,8 +59,10 @@ public class Player : Damageable
     // Private
     private Camera _camera;
     private LayerMask _cameraRaycastMask;
+    private AudioSource _audio;
     private Rigidbody _rb;
     private Vector3 _direction;
+    private GameObject _chargeEffect;
     private float _hInput, _vInput;
     private float _lockedHInput, _lockedVInput;
     private bool _isWalking;
@@ -73,7 +79,11 @@ public class Player : Damageable
         _cameraRaycastMask = LayerMask.GetMask("Enemy", "Bottom Sphere");
         _rb = GetComponent<Rigidbody>();
         
-        OnDamage += () => Anim.SetTrigger("Damaged");
+        OnDamage += () => {
+            if(DamageSound != null)
+                _audio.PlayOneShot(DamageSound);
+            Anim.SetTrigger("Damaged");
+        };
         OnDeath += () => Destroy(gameObject);
     
         Cursor.lockState = CursorLockMode.Locked;
@@ -120,6 +130,8 @@ public class Player : Damageable
     }
 
     private IEnumerator Dash(){
+        if(DashSound != null)
+            _audio.PlayOneShot(DashSound);
         _isDashing = true;
         Invincible = true;
         _lockedHInput = _hInput;
@@ -128,6 +140,7 @@ public class Player : Damageable
         Invincible = false;
         yield return new WaitForSeconds(DashTime - InvincibilityTime);
         _isDashing = false;
+        _dashCooldown = true;
         yield return new WaitForSeconds(DashCooldown);
         _dashCooldown = false;
     }
@@ -175,6 +188,11 @@ public class Player : Damageable
         // start charging on click
         if ((_fireDown || _fireQueued) && !_isCharging && !_isDashing && _coolDownTime <= 0)
         {
+            if(ChargingSound != null)
+                _audio.PlayOneShot(ChargingSound);
+            if(ChargingEffect != null)
+                _chargeEffect = Instantiate(ChargingEffect, BulletSpawn);
+
             _isCharging = true;
             _fireQueued = false;
             _chargeStartTime = Time.time;
@@ -183,6 +201,10 @@ public class Player : Damageable
         // stop charging on mouse up or timer runs out
         if ((_fireUp || _chargeTime > MaxChargeTime) && _isCharging)
         {
+            if(_chargeEffect != null){
+                Destroy(_chargeEffect);
+                _chargeEffect = null;
+            }
             _isCharging = false;
             if (_chargeTime > MinChargeTime)
                 FireChargeShot(_chargeTime);
@@ -196,12 +218,16 @@ public class Player : Damageable
 
     void FireShot()
     {
+        if(ShotSound != null)
+            _audio.PlayOneShot(ShotSound);
+        if(ShotEffect != null)
+            Destroy(Instantiate(ShotEffect, BulletSpawn), 1f);
+
         _isFiring = true; 
         GameObject shot = Instantiate(Shot, BulletSpawn); // create shot
         Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
         shot.transform.localScale = scale;
-
 
         shot.GetComponent<Shot>().Damage = ShotDamage; // set damage of shot
         Destroy(shot, ShotDespawnTime); // destroy it for performance reasons
@@ -211,6 +237,11 @@ public class Player : Damageable
 
     void FireChargeShot(float timeCharged)
     {
+        if(ChargeShotSound != null)
+            _audio.PlayOneShot(ChargeShotSound);
+        if(ChargeShotEffect != null)
+            Destroy(Instantiate(ChargeShotEffect, BulletSpawn), 1f);
+
         _isHeavyFiring = true;
         GameObject shot = Instantiate(ChargeShot, BulletSpawn); // create shot
         Vector3 scale = shot.transform.localScale;

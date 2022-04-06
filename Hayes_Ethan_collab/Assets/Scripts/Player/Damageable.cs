@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class Damageable : MonoBehaviour
 {
+    [Space(15)]
+    [Header("Health")]
     public float Health;
+    [Space(5)]
+    public AudioClip DamageSound;
+
+    [HideInInspector]
     public bool Invincible;
 
     public delegate void DamageHandler();
