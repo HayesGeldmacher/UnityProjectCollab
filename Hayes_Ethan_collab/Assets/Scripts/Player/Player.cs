@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,75 +6,77 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Player : Damageable
 {
-    // public stuff
+    // Public
+    [Space(15)]
     [Header("Movement")]
-    public float ForwardSpeed = 12;
-    public float SidewaysSpeed = 9;
-    public float Gravity = 9.81f;
-
-    [Header("Dash")]
+    public float Speed;
+    [Space(5)]
     public float DashSpeed;
     public float DashTime;
     public float InvincibilityTime;
     public float DashCooldown;
-
-    [Header("Shots")]
+    [Space(15)]
+    
+    [Header("Combat")]
     public Transform BulletSpawn;
+    public Transform SiphonSpawn;
+    [Space(15)]
+
+    [Header("Regular Shot")]
     public GameObject Shot;
-    public GameObject ChargeShot;
-    public float ShotDespawnTime = 5;
-
-    [Header("Damage")]
     public float ShotDamage;
-    public float ChargeShotDamage;
+    public float ShotCooldown;
+    public float ShotDespawnTime;
+    [Space(5)]
+    public GameObject ShotEffect;
+    public AudioClip ShotSound;
+    [Space(15)]
 
-    [Header("Charge Time")]
+    [Header("Charged Shot")]
+    public GameObject ChargeShot;
+    public float ChargeShotDamage;
     public float MinChargeTime;
     public float MaxChargeTime;
-
-    [Header("Cool Down")]
-    public float ShotCoolDown;
     public float ChargeShotCoolDown;
+    public float ChargeShotDespawnTime;
+    [Space(5)]
+    public GameObject ChargingEffect;
+    public AudioClip ChargingSound;
+    public GameObject ChargeShotEffect;
+    public AudioClip ChargeShotSound;
+    public GameObject ChargeCooldownEffect;
+    public AudioClip ChargeCooldownSound;
+    [Space(15)]
 
-    [Header("Animation")]
+    [Header("Model")]
     public Animator Anim;
     public Transform PlayerModel;
-    private bool _isWalking;
-    
-    
 
-    // private stuff
+    // Private
     private Camera _camera;
+    private LayerMask _cameraRaycastMask;
     private Rigidbody _rb;
+    private Vector3 _direction;
     private float _hInput, _vInput;
     private float _lockedHInput, _lockedVInput;
-    private Vector3 _direction;
-    private bool _isDashing;
-    private float _dashStartTime, _dashEndTime;
+    private bool _isWalking;
+    private bool _isDashing, _dashCooldown;
     private bool _fireUp, _fireDown, _fireHold;
-    private float _chargeStartTime;
-    private float _chargeTime;
-    private bool _isCharging;
+    private bool _isCharging, _fireQueued;
+    private float _chargeStartTime, _chargeTime;
+    private bool _isFiring, _isHeavyFiring;
     private float _coolDownTime;
-    //private bool for Fire animation, sets to true in FireShot()
-    private bool _isFiring;
-    private bool _isHeavyFiring;
-    private LayerMask _cameraMask;
-
-    public Vector3 TEST;
-
 
     void Start()
     {
-        _rb = GetComponent<Rigidbody>();
         _camera = Camera.main;
-        _cameraMask = _cameraMask = LayerMask.GetMask("Enemy", "Bottom Sphere");
+        _cameraRaycastMask = LayerMask.GetMask("Enemy", "Bottom Sphere");
+        _rb = GetComponent<Rigidbody>();
         
-        Cursor.lockState = CursorLockMode.Locked;
-
-        OnDamage += () => Debug.Log($"Player Hit - Health: {Health}");
         OnDamage += () => Anim.SetTrigger("Damaged");
         OnDeath += () => Destroy(gameObject);
+    
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -84,38 +87,22 @@ public class Player : Damageable
         UpdateAnimation();
     }
 
-    void UpdatePosition(){
+    private void UpdatePosition()
+    {
         _hInput = Input.GetAxisRaw("Horizontal");
         _vInput = Input.GetAxisRaw("Vertical");
-        
+
         bool dashButton = Input.GetAxisRaw("Dash") > .1;
         bool moving = Mathf.Abs(_hInput)>.1 || Mathf.Abs(_vInput)>.1;
 
-        // sets the start and end of dashing and invincibility
-        if(moving && dashButton && !_isDashing && Time.time-_dashEndTime >= DashCooldown){
-            _isDashing = true;
-            Invincible = true;
-            _lockedHInput = _hInput;
-            _lockedVInput = _vInput;
-            _dashStartTime = Time.time;
-        }
-        if(Time.time-_dashStartTime >= InvincibilityTime){
-            Invincible = false;
-        }
-        if(_isDashing & Time.time-_dashStartTime >= DashTime){
-            _isDashing = false;
-            _dashEndTime = Time.time;
-        }
-        if(_isDashing){
-            _hInput = _lockedHInput;
-            _vInput = _lockedVInput;
-        }
+        if(moving && !_isDashing && !_dashCooldown && dashButton)
+            StartCoroutine(Dash());
 
-        // set player velocity
+        // set player velocity based on dashing or not
         if(!_isDashing){
-            _direction = transform.forward*_vInput*ForwardSpeed+transform.right*_hInput*SidewaysSpeed;
-            if(_direction.magnitude > ForwardSpeed)
-                _direction = _direction.normalized*ForwardSpeed;
+            _direction = (transform.forward*_vInput+transform.right*_hInput)*Speed;
+            if(_direction.magnitude > Speed)
+                _direction = _direction.normalized*Speed;
             _rb.velocity = _direction;
         }else{
             _direction = (transform.forward*_vInput+transform.right*_hInput).normalized;
@@ -129,37 +116,46 @@ public class Player : Damageable
             _rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         // attract player towards sphere
-        _rb.AddForce(transform.position.normalized*-Gravity);
+        _rb.AddForce(transform.position.normalized*-9.81f);
     }
 
-    void UpdateRotation()
-	{
-        //aims the bullets at whatever the reticle is over
-        //the constant will have to change if the reticle is ever moved or the camera
+    private IEnumerator Dash(){
+        _isDashing = true;
+        Invincible = true;
+        _lockedHInput = _hInput;
+        _lockedVInput = _vInput;
+        yield return new WaitForSeconds(InvincibilityTime);
+        Invincible = false;
+        yield return new WaitForSeconds(DashTime - InvincibilityTime);
+        _isDashing = false;
+        yield return new WaitForSeconds(DashCooldown);
+        _dashCooldown = false;
+    }
+
+
+    private void UpdateRotation()
+    {
+        // Update Rotation of Bullet and Siphon Spawn;
         Vector3 rotation = _camera.transform.forward+_camera.transform.up*-.1f;
-        Physics.Raycast(_camera.transform.position, rotation, out RaycastHit hit, 100f, _cameraMask);
+        Physics.Raycast(_camera.transform.position, rotation, out RaycastHit hit, 100f, _cameraRaycastMask);
         BulletSpawn.transform.LookAt(hit.point);
+        SiphonSpawn.transform.LookAt(hit.point);
 
-        //Debug.DrawLine(_camera.transform.position, hit.point);
-        //Debug.DrawRay(_camera.transform.position, rotation * 100f);
-        //Debug.DrawRay(BulletSpawn.position, BulletSpawn.forward * 10);
-
-
-        // point players feet towards sphere
-		Vector3 gravityUp = transform.position.normalized;
+        // Update Player rotation relative to the sphere
+        Vector3 gravityUp = transform.position.normalized;
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
-        // point player model in direction that is walking
+        // Update model rotation in direction of walking
         PlayerModel.transform.rotation = Quaternion.FromToRotation(PlayerModel.transform.up, gravityUp) * PlayerModel.transform.rotation;
         Quaternion desiredRotation = Quaternion.FromToRotation(PlayerModel.forward, _direction) * PlayerModel.rotation;
         PlayerModel.transform.rotation = Quaternion.Slerp(PlayerModel.transform.rotation, desiredRotation, .02f);
 
-        // rotate around y axis with mouse movement
+        // Rotate Camera around y axis with mouse movement
         float hLook = Input.GetAxis("Horizontal Look");
         transform.Rotate(Vector3.up, hLook);
         PlayerModel.Rotate(Vector3.up, -hLook);
-	}
+    }
 
-    void UpdateShooting()
+    private void UpdateShooting()
     {
         _coolDownTime -= Time.deltaTime;
         if(Input.GetAxisRaw("Fire") > .5 && !_fireHold){
@@ -171,10 +167,16 @@ public class Player : Damageable
             _fireHold = false;
         }
 
+        // if mouse down on cooldown queue it up, if let go before cooldown unqueue
+        if(_fireDown && _coolDownTime > 0)
+            _fireQueued = true;
+        if(_fireUp && _coolDownTime > 0)
+            _fireQueued = false;
         // start charging on click
-        if (_fireDown && !_isCharging && !_isDashing && _coolDownTime < 0)
+        if ((_fireDown || _fireQueued) && !_isCharging && !_isDashing && _coolDownTime <= 0)
         {
             _isCharging = true;
+            _fireQueued = false;
             _chargeStartTime = Time.time;
         }
         _chargeTime = Time.time - _chargeStartTime;
@@ -199,9 +201,11 @@ public class Player : Damageable
         Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
         shot.transform.localScale = scale;
+
+
         shot.GetComponent<Shot>().Damage = ShotDamage; // set damage of shot
         Destroy(shot, ShotDespawnTime); // destroy it for performance reasons
-        _coolDownTime = ShotCoolDown; // update cooldown so no new rapid shots
+        _coolDownTime = ShotCooldown; // update cooldown so no new rapid shots
         
     }
 
@@ -212,6 +216,7 @@ public class Player : Damageable
         Vector3 scale = shot.transform.localScale;
         shot.transform.SetParent(null); // detach from player transform
         shot.transform.localScale = scale;
+
         // percentage of charge * damage for charged shot
         float damage = timeCharged / MaxChargeTime * ChargeShotDamage;
         shot.GetComponent<Shot>().Damage = damage;// set damage of shot
@@ -219,8 +224,8 @@ public class Player : Damageable
         _coolDownTime = ChargeShotCoolDown;// update cooldown so no new rapid shots
     }
 
-    void UpdateAnimation(){
-
+    private void UpdateAnimation()
+    {
         _isWalking = (Mathf.Abs(_vInput) > 0.1 || Mathf.Abs(_hInput) > 0.1);
 
        

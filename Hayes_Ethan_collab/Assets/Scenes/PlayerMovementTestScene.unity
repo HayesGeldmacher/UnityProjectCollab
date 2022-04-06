@@ -809,7 +809,7 @@ GameObject:
   - component: {fileID: 927105712}
   - component: {fileID: 927105711}
   - component: {fileID: 927105715}
-  - component: {fileID: 927105710}
+  - component: {fileID: 927105716}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -817,40 +817,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &927105710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927105709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a71983d6bf57c642a9dbdd2e4a1f16b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Health: 100
-  Invincible: 1
-  ForwardSpeed: 9
-  SidewaysSpeed: 9
-  Gravity: 9.81
-  DashSpeed: 13
-  DashTime: 0.5
-  InvincibilityTime: 0.3
-  DashCooldown: 1
-  BulletSpawn: {fileID: 1975488030}
-  Shot: {fileID: 6671374649850836924, guid: b98636a666c48d34ea39cb0ebe4bd862, type: 3}
-  ChargeShot: {fileID: 6671374649850836924, guid: 51b206d660c154b64ae9c79cb7c57580, type: 3}
-  ShotDespawnTime: 1
-  ShotDamage: 20
-  ChargeShotDamage: 100
-  MinChargeTime: 0.3
-  MaxChargeTime: 3
-  ShotCoolDown: 0.05
-  ChargeShotCoolDown: 1
-  Anim: {fileID: 1422802007}
-  PlayerModel: {fileID: 1422802006}
-  TEST: {x: -10, y: 10, z: 0}
 --- !u!136 &927105711
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -946,6 +912,47 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &927105716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 927105709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2999edf59b36e549ade3a861147e090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 100
+  Invincible: 0
+  Speed: 9
+  DashSpeed: 15
+  DashTime: 0.5
+  InvincibilityTime: 0.3
+  DashCooldown: 1
+  BulletSpawn: {fileID: 1975488030}
+  SiphonSpawn: {fileID: 1975488030}
+  Shot: {fileID: 6671374649850836924, guid: b98636a666c48d34ea39cb0ebe4bd862, type: 3}
+  ShotDamage: 20
+  ShotCooldown: 0.1
+  ShotDespawnTime: 1
+  ShotEffect: {fileID: 0}
+  ShotSound: {fileID: 0}
+  ChargeShot: {fileID: 6671374649850836924, guid: 51b206d660c154b64ae9c79cb7c57580, type: 3}
+  ChargeShotDamage: 100
+  MinChargeTime: 0.3
+  MaxChargeTime: 3
+  ChargeShotCoolDown: 1
+  ChargeShotDespawnTime: 1
+  ChargingEffect: {fileID: 0}
+  ChargingSound: {fileID: 0}
+  ChargeShotEffect: {fileID: 0}
+  ChargeShotSound: {fileID: 0}
+  ChargeCooldownEffect: {fileID: 0}
+  ChargeCooldownSound: {fileID: 0}
+  Anim: {fileID: 1422802007}
+  PlayerModel: {fileID: 1422802006}
 --- !u!1 &1211822204
 GameObject:
   m_ObjectHideFlags: 0
