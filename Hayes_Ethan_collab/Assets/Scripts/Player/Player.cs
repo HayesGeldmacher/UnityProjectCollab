@@ -43,6 +43,7 @@ public class Player : Damageable
     
 
     // private stuff
+    private Camera _camera;
     private Rigidbody _rb;
     private float _hInput, _vInput;
     private float _lockedHInput, _lockedVInput;
@@ -57,11 +58,16 @@ public class Player : Damageable
     //private bool for Fire animation, sets to true in FireShot()
     private bool _isFiring;
     private bool _isHeavyFiring;
+    private LayerMask _cameraMask;
+
+    public Vector3 TEST;
 
 
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _camera = Camera.main;
+        _cameraMask = _cameraMask = LayerMask.GetMask("Enemy", "Bottom Sphere");
         
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -126,8 +132,17 @@ public class Player : Damageable
 
     void UpdateRotation()
 	{
-        
-        BulletSpawn.LookAt(Vector3.zero);
+        //aims the bullets at whatever the reticle is over
+        //the constant will have to change if the reticle is ever moved or the camera
+        Vector3 rotation = _camera.transform.forward+_camera.transform.up*-.1f;
+        Physics.Raycast(_camera.transform.position, rotation, out RaycastHit hit, 100f, _cameraMask);
+        BulletSpawn.transform.LookAt(hit.point);
+
+        //Debug.DrawLine(_camera.transform.position, hit.point);
+        //Debug.DrawRay(_camera.transform.position, rotation * 100f);
+        //Debug.DrawRay(BulletSpawn.position, BulletSpawn.forward * 10);
+
+
         // point players feet towards sphere
 		Vector3 gravityUp = transform.position.normalized;
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;

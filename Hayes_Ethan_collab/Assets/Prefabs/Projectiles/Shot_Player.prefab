@@ -110,10 +110,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 10
-  Speed: 25
+  DestroyOnHit: 1
   CanHit:
     serializedVersion: 2
     m_Bits: 128
+  Speed: 25
+  SeekPlayer: 0
+  SeekStrength: 0
 --- !u!54 &-6750351556089232586
 Rigidbody:
   m_ObjectHideFlags: 0
