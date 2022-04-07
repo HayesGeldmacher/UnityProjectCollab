@@ -52,6 +52,13 @@ public class Player : Damageable
     public AudioClip ChargeCooldownSound;
     [Space(15)]
 
+    [Header("Siphon")]
+    public float LifeStealAmount;
+    public float LifeStealTick;
+    public float SiphonPredelay;
+    public float SiphonPostdelay;
+    [Space(15)]
+
     [Header("Model")]
     public Animator Anim;
     public Transform PlayerModel;
@@ -76,7 +83,9 @@ public class Player : Damageable
     private float _chargeStartTime, _chargeTime;
     private bool _isFiring, _isHeavyFiring;
     private bool _isSiphoning;
+    private Damageable _siphonTarget;
     private float _coolDownTime;
+    private float _siphonCooldown;
 
     void Start()
     {
@@ -107,7 +116,7 @@ public class Player : Damageable
     void LateUpdate()
     {
         _lineRenderer.SetPosition(0, SiphonSpawn.position);
-        _lineRenderer.SetPosition(1, _camerRaycastPoint);
+        _lineRenderer.SetPosition(1, _siphonHitPoint);
     }
 
     private void UpdatePosition()
@@ -120,6 +129,11 @@ public class Player : Damageable
 
         if(moving && !_isDashing && !_dashCooldown && dashButton)
             StartCoroutine(Dash());
+
+        if(_isDashing){
+            _vInput = _lockedVInput;
+            _hInput = _lockedHInput;
+        }
 
         // set player velocity based on dashing or not
         if(!_isDashing){
@@ -175,10 +189,13 @@ public class Player : Damageable
         // Update Player rotation relative to the sphere
         Vector3 gravityUp = transform.position.normalized;
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
+        
         // Update model rotation in direction of walking
-        PlayerModel.transform.rotation = Quaternion.FromToRotation(PlayerModel.transform.up, gravityUp) * PlayerModel.transform.rotation;
-        Quaternion desiredRotation = Quaternion.FromToRotation(PlayerModel.forward, _direction) * PlayerModel.rotation;
-        PlayerModel.transform.rotation = Quaternion.Slerp(PlayerModel.transform.rotation, desiredRotation, .02f);
+        if(!_isSiphoning){
+            PlayerModel.transform.rotation = Quaternion.FromToRotation(PlayerModel.transform.up, gravityUp) * PlayerModel.transform.rotation;
+            Quaternion desiredRotation = Quaternion.FromToRotation(PlayerModel.forward, _direction) * PlayerModel.rotation;
+            PlayerModel.transform.rotation = Quaternion.Slerp(PlayerModel.transform.rotation, desiredRotation, .02f);
+        }
 
         // Rotate Camera around y axis with mouse movement
         float hLook = Input.GetAxis("Horizontal Look");
@@ -187,6 +204,8 @@ public class Player : Damageable
     }
 
     private void UpdateSiphon(){
+        _siphonCooldown -= Time.deltaTime;
+        // Set up butotn down and button up
         if(Input.GetAxisRaw("Secondary Fire") > .5 && !_secondaryFireHold){
             _secondaryFireDown = true;
             _secondaryFireHold = true;
@@ -195,21 +214,36 @@ public class Player : Damageable
             _secondaryFireUp = true;
             _secondaryFireHold = false;
         }
+
+        // logic to start and stop siphon state
         if(_secondaryFireDown && !_isCharging && !_isDashing){
-            Physics.Raycast(SiphonSpawn.position, SiphonSpawn.forward, out RaycastHit hit, 100f, _cameraRaycastMask);
+            Vector3 dir = _camerRaycastPoint - SiphonSpawn.position;
+            Physics.Raycast(SiphonSpawn.position, dir, out RaycastHit hit, 100f, _cameraRaycastMask);
             Debug.Log(hit.collider.gameObject);
             if(hit.collider.gameObject.TryGetComponent<Damageable>(out Damageable d)){
-                //if(d.Staggered)
+                if(d.Staggered && CurrentHealth != Health){
+                    _siphonTarget = d;
+                    d.Tethered = true;
+                    d.Staggered = false;
                     _isSiphoning = true;
-                // TODO: see if hit is damageable and stunned, add time and amount, send message to damageable to stay staggered
-                _siphonHitPoint = hit.point;
-                _lineRenderer.enabled = true;
+                    _lineRenderer.enabled = true;
+                }
             }
         }
-        if(_secondaryFireUp){
+        if((_secondaryFireUp || CurrentHealth == Health) && _isSiphoning){
             _lineRenderer.enabled = false;
             _isSiphoning = false;
+            _siphonTarget.Tethered = false;
+            _siphonTarget.Staggered = false;
         }
+
+        //heal and do damage;
+        if(_isSiphoning && _siphonCooldown <=0){
+            _siphonCooldown = LifeStealTick;
+            _siphonTarget.Damage(LifeStealAmount);
+            Heal(LifeStealAmount);
+        }
+
 
         _secondaryFireDown = false;
         _secondaryFireUp = false;
@@ -310,7 +344,7 @@ public class Player : Damageable
         _isWalking = (Mathf.Abs(_vInput) > 0.1 || Mathf.Abs(_hInput) > 0.1);
 
        
-        Anim.SetBool("Walking", _isWalking);
+        Anim.SetBool("Walking", _rb.velocity.magnitude >= .1);
         Anim.SetBool("Dash", _isDashing);
        
         //doesnt enter charge animation when firing in quick succession

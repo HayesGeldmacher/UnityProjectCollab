@@ -23,6 +23,7 @@ public class BaseEnemy : Damageable
     protected GameObject _player;
     private List<EnemyAttackInfo> _triggeredAttackPool;
     protected EnemyAttackInfo _chosenAttack;
+    protected Attack _spawnedAttack;
     private float _cooldownTimer, _cooldownLength;
     protected bool _attacking;
 
@@ -53,6 +54,19 @@ public class BaseEnemy : Damageable
     public virtual void Update(){
         UpdateRotation();
         UpdateAttack();
+        UpdateStagger();
+    }
+
+    private void UpdateStagger()
+    {
+        if(Staggered){
+            _spawnedAttack.OnAttackFinish();
+        }
+
+        if(Staggered || Tethered)
+            _rb.constraints = RigidbodyConstraints.FreezeAll;
+        else
+            _rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     private void UpdateRotation(){
@@ -101,14 +115,14 @@ public class BaseEnemy : Damageable
     public void SpawnAttack(){
         EnemyAttackInfo info = _chosenAttack;
         _chosenAttack = null;
-        Attack attackClone = Instantiate(info.Attack, transform);
+        _spawnedAttack = Instantiate(info.Attack, transform);
         _attacking = true;
         // this event is called when the attack finishes, it updates attacking flag and starts cooldown timer
-        attackClone.OnAttackFinish += () => {
+        _spawnedAttack.OnAttackFinish += () => {
             _attacking = false;
             _cooldownTimer = info.Cooldown;
         };
-        attackClone.OverrideAttackSpawns(_spawnLookup);
+        _spawnedAttack.OverrideAttackSpawns(_spawnLookup);
     }
 
     void OnDrawGizmosSelected(){

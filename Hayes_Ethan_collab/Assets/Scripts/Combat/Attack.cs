@@ -20,6 +20,9 @@ public class Attack : MonoBehaviour
     void Awake(){
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _projectileObjects = new List<GameObject>();
+
+        OnAttackFinish += () => Destroy(gameObject);
+
         InitLookup();
         InitCooldowns();
         foreach(AttackInfo shot in Projectiles)
@@ -67,7 +70,6 @@ public class Attack : MonoBehaviour
             return;
         if(OnAttackFinish != null)
             OnAttackFinish();
-        Destroy(gameObject);
     }
 
     void UpdateAttackSpawns(){

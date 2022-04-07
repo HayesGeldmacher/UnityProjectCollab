@@ -7,14 +7,24 @@ public class Damageable : MonoBehaviour
     [Space(15)]
     [Header("Health")]
     public float Health;
-    private float _health;
     [Space(5)]
     public AudioClip DamageSound;
+    [Space(5)]
+    public float StaggerDamage;
+    public float StaggerWindow;
+    public float StaggerTime;
 
     [HideInInspector]
+    public float CurrentHealth;
     public bool Invincible;
     [HideInInspector]
     public bool Staggered;
+    [HideInInspector]
+    public bool Tethered;
+
+    private float _staggerDamageCounter;
+
+
 
     public delegate void DamageHandler();
     public event DamageHandler OnDamage;
@@ -23,25 +33,43 @@ public class Damageable : MonoBehaviour
     public event DeathHandler OnDeath;
 
     public virtual void Awake(){
-        _health = Health;
+        CurrentHealth = Health;
+    }
+
+    private IEnumerator Stagger(){
+        Debug.Log("staggered");
+        Staggered = true;
+        yield return new WaitForSeconds(StaggerTime);
+        Staggered = false;
+        _staggerDamageCounter = 0;
+    }
+
+    private IEnumerator AddToDamageCounter(float damage){
+        _staggerDamageCounter += damage;
+        if(_staggerDamageCounter >= StaggerDamage)
+            StartCoroutine(Stagger());
+        yield return new WaitForSeconds(StaggerWindow);
+        if(_staggerDamageCounter >= damage)
+            _staggerDamageCounter -= damage;
     }
 
     public bool Damage(float damage)
     {
         if(Invincible || damage <= 0) return false;
-        _health -= damage;
+        CurrentHealth -= damage;
+        StartCoroutine(AddToDamageCounter(damage));
         if(OnDamage != null)
             OnDamage();
-        if (_health <= 0 && OnDeath != null)
+        if (CurrentHealth <= 0 && OnDeath != null)
             OnDeath();
         return true;
     }
 
     public bool Heal(float amount){
         if(amount <= 0 ) return false;
-        _health += amount;
-        if(_health > Health)
-            _health = Health;
+        CurrentHealth += amount;
+        if(CurrentHealth > Health)
+            CurrentHealth = Health;
         return true;
     }
 }
