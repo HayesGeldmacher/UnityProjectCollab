@@ -13,6 +13,8 @@ public class Damageable : MonoBehaviour
 
     [HideInInspector]
     public bool Invincible;
+    [HideInInspector]
+    public bool Staggered;
 
     public delegate void DamageHandler();
     public event DamageHandler OnDamage;

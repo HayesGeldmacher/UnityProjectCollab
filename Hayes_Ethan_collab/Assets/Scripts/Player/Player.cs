@@ -59,6 +59,9 @@ public class Player : Damageable
     // Private
     private Camera _camera;
     private LayerMask _cameraRaycastMask;
+    private Vector3 _camerRaycastPoint;
+    private Vector3 _siphonHitPoint;
+    private LineRenderer _lineRenderer;
     private AudioSource _audio;
     private Rigidbody _rb;
     private Vector3 _direction;
@@ -67,10 +70,12 @@ public class Player : Damageable
     private float _lockedHInput, _lockedVInput;
     private bool _isWalking;
     private bool _isDashing, _dashCooldown;
-    private bool _fireUp, _fireDown, _fireHold;
+    private bool _fireDown, _fireUp, _fireHold;
+    private bool _secondaryFireDown, _secondaryFireUp, _secondaryFireHold;
     private bool _isCharging, _fireQueued;
     private float _chargeStartTime, _chargeTime;
     private bool _isFiring, _isHeavyFiring;
+    private bool _isSiphoning;
     private float _coolDownTime;
 
     void Start()
@@ -78,6 +83,7 @@ public class Player : Damageable
         _camera = Camera.main;
         _cameraRaycastMask = LayerMask.GetMask("Enemy", "Bottom Sphere");
         _rb = GetComponent<Rigidbody>();
+        _lineRenderer = GetComponent<LineRenderer>();
         
         OnDamage += () => {
             if(DamageSound != null)
@@ -93,8 +99,15 @@ public class Player : Damageable
     {
         UpdatePosition();
         UpdateRotation();
+        UpdateSiphon();
         UpdateShooting();
         UpdateAnimation();
+    }
+
+    void LateUpdate()
+    {
+        _lineRenderer.SetPosition(0, SiphonSpawn.position);
+        _lineRenderer.SetPosition(1, _camerRaycastPoint);
     }
 
     private void UpdatePosition()
@@ -117,6 +130,10 @@ public class Player : Damageable
         }else{
             _direction = (transform.forward*_vInput+transform.right*_hInput).normalized;
             _rb.velocity = _direction * DashSpeed;
+        }
+
+        if(_isSiphoning){
+            _rb.velocity = Vector3.zero;
         }
 
         // locks position when not moving to prevent sliding
@@ -151,6 +168,7 @@ public class Player : Damageable
         // Update Rotation of Bullet and Siphon Spawn;
         Vector3 rotation = _camera.transform.forward+_camera.transform.up*-.1f;
         Physics.Raycast(_camera.transform.position, rotation, out RaycastHit hit, 100f, _cameraRaycastMask);
+        _camerRaycastPoint = hit.point;
         BulletSpawn.transform.LookAt(hit.point);
         SiphonSpawn.transform.LookAt(hit.point);
 
@@ -168,9 +186,41 @@ public class Player : Damageable
         PlayerModel.Rotate(Vector3.up, -hLook);
     }
 
+    private void UpdateSiphon(){
+        if(Input.GetAxisRaw("Secondary Fire") > .5 && !_secondaryFireHold){
+            _secondaryFireDown = true;
+            _secondaryFireHold = true;
+        }
+        if(Input.GetAxisRaw("Secondary Fire") < .5 && _secondaryFireHold){
+            _secondaryFireUp = true;
+            _secondaryFireHold = false;
+        }
+        if(_secondaryFireDown && !_isCharging && !_isDashing){
+            Physics.Raycast(SiphonSpawn.position, SiphonSpawn.forward, out RaycastHit hit, 100f, _cameraRaycastMask);
+            Debug.Log(hit.collider.gameObject);
+            if(hit.collider.gameObject.TryGetComponent<Damageable>(out Damageable d)){
+                //if(d.Staggered)
+                    _isSiphoning = true;
+                // TODO: see if hit is damageable and stunned, add time and amount, send message to damageable to stay staggered
+                _siphonHitPoint = hit.point;
+                _lineRenderer.enabled = true;
+            }
+        }
+        if(_secondaryFireUp){
+            _lineRenderer.enabled = false;
+            _isSiphoning = false;
+        }
+
+        _secondaryFireDown = false;
+        _secondaryFireUp = false;
+    }
+
     private void UpdateShooting()
     {
         _coolDownTime -= Time.deltaTime;
+
+        if(_isSiphoning) return;
+
         if(Input.GetAxisRaw("Fire") > .5 && !_fireHold){
             _fireDown = true;
             _fireHold = true;
