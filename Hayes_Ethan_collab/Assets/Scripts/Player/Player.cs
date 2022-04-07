@@ -57,6 +57,9 @@ public class Player : Damageable
     public float LifeStealTick;
     public float SiphonPredelay;
     public float SiphonPostdelay;
+    [Space(5)]
+    public AudioClip SiphonHitSound;
+    public AudioClip SiphonMissSound;
     [Space(15)]
 
     [Header("Model")]
@@ -116,7 +119,9 @@ public class Player : Damageable
     void LateUpdate()
     {
         _lineRenderer.SetPosition(0, SiphonSpawn.position);
-        _lineRenderer.SetPosition(1, _siphonHitPoint);
+        Vector3 oldPos = _lineRenderer.GetPosition(1);
+        Vector3 newPos = Vector3.Lerp(oldPos, _siphonHitPoint, .05f);
+        _lineRenderer.SetPosition(1, newPos);
     }
 
     private void UpdatePosition()
@@ -217,40 +222,52 @@ public class Player : Damageable
 
         // logic to start and stop siphon state
         if(_secondaryFireDown && !_isCharging && !_isDashing){
+            StartCoroutine(SiphonEffects());
             Vector3 dir = _camerRaycastPoint - SiphonSpawn.position;
             Physics.Raycast(SiphonSpawn.position, dir, out RaycastHit hit, 100f, _cameraRaycastMask);
-            
-            if(hit.collider.gameObject.TryGetComponent<Damageable>(out Damageable d)){
+            _siphonHitPoint = hit.point;
+            if(hit.collider.gameObject.TryGetComponent<Damageable>(out Damageable d))
                 if(d.Staggered && CurrentHealth != Health)
                     StartCoroutine(StartSiphon(d));
-            }else{
-                // visual cue that cant siphon
-            }
         }
-        if((_secondaryFireUp || CurrentHealth == Health) && _isSiphoning){
+        if((!_secondaryFireHold || CurrentHealth == Health) && _isSiphoning){
             StartCoroutine(StopSiphon());
         }
 
-        //heal and do damage;
+        // heal and do damage;
         if(_isSiphoning && _siphonCooldown <=0){
             _siphonCooldown = LifeStealTick;
             _siphonTarget.Damage(LifeStealAmount);
             Heal(LifeStealAmount);
         }
 
-        _lineRenderer.enabled = _isSiphoning;
-
         _secondaryFireDown = false;
         _secondaryFireUp = false;
     }
 
+    private IEnumerator SiphonEffects(){
+        _lineRenderer.SetPosition(1, SiphonSpawn.position);
+        _lineRenderer.enabled = true;
+        yield return new WaitForSeconds(SiphonPredelay+.01f);
+
+        if(_isSiphoning && SiphonHitSound) _audio.PlayOneShot(SiphonHitSound);
+        if(!_isSiphoning && SiphonMissSound) _audio.PlayOneShot(SiphonMissSound);
+
+        while(_isSiphoning){
+            yield return null;
+        }
+        _siphonHitPoint = SiphonSpawn.position;
+        yield return new WaitForSeconds(SiphonPostdelay-.1f);
+        _lineRenderer.enabled = false;
+    }
+
     private IEnumerator StartSiphon(Damageable d){
         yield return new WaitForSeconds(SiphonPredelay);
-        _siphonTarget = d;
-         d.OnDeath += () => _isSiphoning = false;
-         d.Tethered = true;
-         d.Staggered = false;
         _isSiphoning = true;
+        _siphonTarget = d;
+        d.OnDeath += () => _isSiphoning = false;
+        d.Tethered = true;
+        d.Staggered = false;
     }
 
     private IEnumerator StopSiphon(){
