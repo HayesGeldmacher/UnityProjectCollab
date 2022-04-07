@@ -93,10 +93,10 @@ public class Player : Damageable
         _cameraRaycastMask = LayerMask.GetMask("Enemy", "Bottom Sphere");
         _rb = GetComponent<Rigidbody>();
         _lineRenderer = GetComponent<LineRenderer>();
+        _audio = GetComponent<AudioSource>();
         
         OnDamage += () => {
-            if(DamageSound != null)
-                _audio.PlayOneShot(DamageSound);
+            if(DamageSound) _audio.PlayOneShot(DamageSound);
             Anim.SetTrigger("Damaged");
         };
         OnDeath += () => Destroy(gameObject);
@@ -161,8 +161,8 @@ public class Player : Damageable
     }
 
     private IEnumerator Dash(){
-        if(DashSound != null)
-            _audio.PlayOneShot(DashSound);
+        if(DashSound) _audio.PlayOneShot(DashSound);
+        if(DashEffect) Destroy(Instantiate(DashEffect), DashTime);
         _isDashing = true;
         Invincible = true;
         _lockedHInput = _hInput;
@@ -219,23 +219,16 @@ public class Player : Damageable
         if(_secondaryFireDown && !_isCharging && !_isDashing){
             Vector3 dir = _camerRaycastPoint - SiphonSpawn.position;
             Physics.Raycast(SiphonSpawn.position, dir, out RaycastHit hit, 100f, _cameraRaycastMask);
-            Debug.Log(hit.collider.gameObject);
+            
             if(hit.collider.gameObject.TryGetComponent<Damageable>(out Damageable d)){
-                if(d.Staggered && CurrentHealth != Health){
-                    _siphonTarget = d;
-                    d.OnDeath += () => _isSiphoning = false;
-                    d.Tethered = true;
-                    d.Staggered = false;
-                    _isSiphoning = true;
-                }
+                if(d.Staggered && CurrentHealth != Health)
+                    StartCoroutine(StartSiphon(d));
             }else{
-
+                // visual cue that cant siphon
             }
         }
         if((_secondaryFireUp || CurrentHealth == Health) && _isSiphoning){
-            _isSiphoning = false;
-            _siphonTarget.Tethered = false;
-            _siphonTarget.Staggered = false;
+            StartCoroutine(StopSiphon());
         }
 
         //heal and do damage;
@@ -249,6 +242,22 @@ public class Player : Damageable
 
         _secondaryFireDown = false;
         _secondaryFireUp = false;
+    }
+
+    private IEnumerator StartSiphon(Damageable d){
+        yield return new WaitForSeconds(SiphonPredelay);
+        _siphonTarget = d;
+         d.OnDeath += () => _isSiphoning = false;
+         d.Tethered = true;
+         d.Staggered = false;
+        _isSiphoning = true;
+    }
+
+    private IEnumerator StopSiphon(){
+        yield return new WaitForSeconds(SiphonPostdelay);
+        _isSiphoning = false;
+        _siphonTarget.Tethered = false;
+        _siphonTarget.Staggered = false;
     }
 
     private void UpdateShooting()
@@ -274,10 +283,9 @@ public class Player : Damageable
         // start charging on click
         if ((_fireDown || _fireQueued) && !_isCharging && !_isDashing && _coolDownTime <= 0)
         {
-            if(ChargingSound != null)
-                _audio.PlayOneShot(ChargingSound);
-            if(ChargingEffect != null)
-                _chargeEffect = Instantiate(ChargingEffect, BulletSpawn);
+            //TODO: fix this so its not a one shot and can stop playing
+            if(ChargingSound)  _audio.PlayOneShot(ChargingSound);
+            if(ChargingEffect)  _chargeEffect = Instantiate(ChargingEffect, BulletSpawn);
 
             _isCharging = true;
             _fireQueued = false;
@@ -287,10 +295,8 @@ public class Player : Damageable
         // stop charging on mouse up or timer runs out
         if ((_fireUp || _chargeTime > MaxChargeTime) && _isCharging)
         {
-            if(_chargeEffect != null){
-                Destroy(_chargeEffect);
-                _chargeEffect = null;
-            }
+            if(_chargeEffect) Destroy(_chargeEffect);
+
             _isCharging = false;
             if (_chargeTime > MinChargeTime)
                 FireChargeShot(_chargeTime);
@@ -304,10 +310,8 @@ public class Player : Damageable
 
     void FireShot()
     {
-        if(ShotSound != null)
-            _audio.PlayOneShot(ShotSound);
-        if(ShotEffect != null)
-            Destroy(Instantiate(ShotEffect, BulletSpawn), 1f);
+        if(ShotSound) _audio.PlayOneShot(ShotSound);
+        if(ShotEffect)  Destroy(Instantiate(ShotEffect, BulletSpawn), 1f);
 
         _isFiring = true; 
         GameObject shot = Instantiate(Shot, BulletSpawn); // create shot
@@ -323,10 +327,8 @@ public class Player : Damageable
 
     void FireChargeShot(float timeCharged)
     {
-        if(ChargeShotSound != null)
-            _audio.PlayOneShot(ChargeShotSound);
-        if(ChargeShotEffect != null)
-            Destroy(Instantiate(ChargeShotEffect, BulletSpawn), 1f);
+        if(ChargeShotSound) _audio.PlayOneShot(ChargeShotSound);
+        if(ChargeShotEffect) Destroy(Instantiate(ChargeShotEffect, BulletSpawn), 1f);
 
         _isHeavyFiring = true;
         GameObject shot = Instantiate(ChargeShot, BulletSpawn); // create shot

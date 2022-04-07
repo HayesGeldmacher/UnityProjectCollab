@@ -688,6 +688,8 @@ MonoBehaviour:
   StaggerDamage: 41
   StaggerWindow: 2
   StaggerTime: 1.5
+  StaggerEffect: {fileID: 0}
+  StaggerSound: {fileID: 0}
   CurrentHealth: 0
   Invincible: 0
   Staggered: 0
@@ -1034,6 +1036,8 @@ MonoBehaviour:
   StaggerDamage: 0
   StaggerWindow: 0
   StaggerTime: 0
+  StaggerEffect: {fileID: 0}
+  StaggerSound: {fileID: 0}
   CurrentHealth: 0
   Invincible: 0
   Staggered: 0
@@ -1053,7 +1057,7 @@ MonoBehaviour:
   ShotCooldown: 0.2
   ShotDespawnTime: 1
   ShotEffect: {fileID: 0}
-  ShotSound: {fileID: 0}
+  ShotSound: {fileID: 8300000, guid: d73d37d790dd00b4e88ba54a83cd4735, type: 3}
   ChargeShot: {fileID: 6671374649850836924, guid: 51b206d660c154b64ae9c79cb7c57580, type: 3}
   ChargeShotDamage: 100
   MinChargeTime: 0.3
@@ -1063,13 +1067,13 @@ MonoBehaviour:
   ChargingEffect: {fileID: 0}
   ChargingSound: {fileID: 0}
   ChargeShotEffect: {fileID: 0}
-  ChargeShotSound: {fileID: 0}
+  ChargeShotSound: {fileID: 8300000, guid: d73d37d790dd00b4e88ba54a83cd4735, type: 3}
   ChargeCooldownEffect: {fileID: 0}
   ChargeCooldownSound: {fileID: 0}
   LifeStealAmount: 2
   LifeStealTick: 0.2
-  SiphonPredelay: 0
-  SiphonPostdelay: 0
+  SiphonPredelay: 0.2
+  SiphonPostdelay: 0.1
   Anim: {fileID: 1422802007}
   PlayerModel: {fileID: 1422802006}
 --- !u!120 &927105717
@@ -1603,6 +1607,8 @@ MonoBehaviour:
   StaggerDamage: 0
   StaggerWindow: 0
   StaggerTime: 0
+  StaggerEffect: {fileID: 0}
+  StaggerSound: {fileID: 0}
   CurrentHealth: 0
   Invincible: 0
   Staggered: 0

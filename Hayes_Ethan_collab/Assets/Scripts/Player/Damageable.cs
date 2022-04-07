@@ -13,6 +13,9 @@ public class Damageable : MonoBehaviour
     public float StaggerDamage;
     public float StaggerWindow;
     public float StaggerTime;
+    [Space(5)]
+    public GameObject StaggerEffect;
+    public AudioClip StaggerSound;
 
     [HideInInspector]
     public float CurrentHealth;
@@ -38,6 +41,8 @@ public class Damageable : MonoBehaviour
 
     private IEnumerator Stagger(){
         Debug.Log("staggered");
+        if(StaggerSound) AudioSource.PlayClipAtPoint(StaggerSound, transform.position);
+        if(StaggerEffect) Destroy(Instantiate(StaggerEffect), StaggerTime);
         Staggered = true;
         yield return new WaitForSeconds(StaggerTime);
         Staggered = false;
