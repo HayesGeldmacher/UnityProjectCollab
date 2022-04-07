@@ -2,7 +2,19 @@ fileFormatVersion: 2
 guid: 999d83f3edeabc84ab04431de5c08929
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 2667949614841947897
+    second: Walk
+  - first:
+      74: -3704289112126983070
+    second: Shoot
+  - first:
+      74: -1735320136582349510
+    second: Bone|Shoot
+  - first:
+      74: -1098847954737581102
+    second: Bone|Walk
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -101,7 +113,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: Head
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
@@ -109,7 +121,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 
