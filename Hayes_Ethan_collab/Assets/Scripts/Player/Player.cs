@@ -223,15 +223,16 @@ public class Player : Damageable
             if(hit.collider.gameObject.TryGetComponent<Damageable>(out Damageable d)){
                 if(d.Staggered && CurrentHealth != Health){
                     _siphonTarget = d;
+                    d.OnDeath += () => _isSiphoning = false;
                     d.Tethered = true;
                     d.Staggered = false;
                     _isSiphoning = true;
-                    _lineRenderer.enabled = true;
                 }
+            }else{
+
             }
         }
         if((_secondaryFireUp || CurrentHealth == Health) && _isSiphoning){
-            _lineRenderer.enabled = false;
             _isSiphoning = false;
             _siphonTarget.Tethered = false;
             _siphonTarget.Staggered = false;
@@ -244,6 +245,7 @@ public class Player : Damageable
             Heal(LifeStealAmount);
         }
 
+        _lineRenderer.enabled = _isSiphoning;
 
         _secondaryFireDown = false;
         _secondaryFireUp = false;

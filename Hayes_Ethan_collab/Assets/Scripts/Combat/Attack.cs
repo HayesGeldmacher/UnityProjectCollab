@@ -21,7 +21,10 @@ public class Attack : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player").transform;
         _projectileObjects = new List<GameObject>();
 
-        OnAttackFinish += () => Destroy(gameObject);
+        OnAttackFinish += () => {
+            try{Destroy(gameObject);}
+            catch {}
+        };
 
         InitLookup();
         InitCooldowns();
@@ -117,7 +120,6 @@ public class Attack : MonoBehaviour
     }
 
     void OnDestroy(){
-        Debug.Log("DESTROYED");
         foreach(GameObject obj in _projectileObjects)
             Destroy(obj);
     }
