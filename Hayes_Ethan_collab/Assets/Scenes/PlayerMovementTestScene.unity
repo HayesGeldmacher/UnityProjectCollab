@@ -1057,17 +1057,17 @@ MonoBehaviour:
   ShotCooldown: 0.2
   ShotDespawnTime: 1
   ShotEffect: {fileID: 0}
-  ShotSound: {fileID: 8300000, guid: d73d37d790dd00b4e88ba54a83cd4735, type: 3}
+  ShotSound: {fileID: 8300000, guid: da3b69454ddae3b4d9a5af8c9bd5cebc, type: 3}
   ChargeShot: {fileID: 6671374649850836924, guid: 51b206d660c154b64ae9c79cb7c57580, type: 3}
   ChargeShotDamage: 100
   MinChargeTime: 0.3
-  MaxChargeTime: 3
+  MaxChargeTime: 4
   ChargeShotCoolDown: 1
   ChargeShotDespawnTime: 1
-  ChargingEffect: {fileID: 0}
-  ChargingSound: {fileID: 0}
+  ChargingEffect: {fileID: 731476279744359611, guid: 375d71f2944bd1949a3c0aba3421c738, type: 3}
+  ChargingSound: {fileID: 8300000, guid: 6dc7b9d5cb9a58f4c8997da0f4a3a822, type: 3}
   ChargeShotEffect: {fileID: 0}
-  ChargeShotSound: {fileID: 8300000, guid: d73d37d790dd00b4e88ba54a83cd4735, type: 3}
+  ChargeShotSound: {fileID: 8300000, guid: e406486b88479604ea950c234fdd521e, type: 3}
   ChargeCooldownEffect: {fileID: 0}
   ChargeCooldownSound: {fileID: 0}
   LifeStealAmount: 2
