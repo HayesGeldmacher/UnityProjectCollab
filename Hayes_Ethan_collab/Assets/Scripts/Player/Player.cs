@@ -89,6 +89,7 @@ public class Player : Damageable
     private Damageable _siphonTarget;
     private float _coolDownTime;
     private float _siphonCooldown;
+    private bool _startChargeEffects;
 
     void Start()
     {
@@ -300,25 +301,34 @@ public class Player : Damageable
         // start charging on click
         if ((_fireDown || _fireQueued) && !_isCharging && !_isDashing && _coolDownTime <= 0)
         {
-            //TODO: fix this so its not a one shot and can stop playing
-            if(ChargingSound)  _audio.PlayOneShot(ChargingSound);
-            if(ChargingEffect)  _chargeEffect = Instantiate(ChargingEffect, BulletSpawn);
-
             _isCharging = true;
             _fireQueued = false;
             _chargeStartTime = Time.time;
         }
         _chargeTime = Time.time - _chargeStartTime;
+
+        // starts effects when charging
+        if(_isCharging && !_startChargeEffects && _chargeTime >= MinChargeTime){
+            if(ChargingSound){
+                _audio.clip = ChargingSound;
+                _audio.Play();
+            }
+            if(ChargingEffect)  _chargeEffect = Instantiate(ChargingEffect, BulletSpawn);
+            _startChargeEffects = true;
+        }
+
         // stop charging on mouse up or timer runs out
         if ((_fireUp || _chargeTime > MaxChargeTime) && _isCharging)
         {
             if(_chargeEffect) Destroy(_chargeEffect);
+            if(_audio.isPlaying) _audio.Stop();
 
             _isCharging = false;
             if (_chargeTime > MinChargeTime)
                 FireChargeShot(_chargeTime);
             else
                 FireShot();
+            _startChargeEffects = false;
         }
 
         _fireUp = false;
@@ -327,7 +337,7 @@ public class Player : Damageable
 
     void FireShot()
     {
-        if(ShotSound) _audio.PlayOneShot(ShotSound);
+        if(ShotSound) _audio.PlayOneShot(ShotSound, .5f);
         if(ShotEffect)  Destroy(Instantiate(ShotEffect, BulletSpawn), 1f);
 
         _isFiring = true; 

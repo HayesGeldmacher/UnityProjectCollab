@@ -47,7 +47,7 @@ MonoBehaviour:
   - Name: main
     SpawnTransform: {fileID: 3965635907088670088}
     TrackPlayer: 1
-    PlayerTrackStrength: 0
+    PlayerTrackStrength: 10000000
     RotationSpeed: {x: 0, y: 0, z: 0}
   Projectiles:
   - Shot: {fileID: 3183913123780727394, guid: 62100ee8dd31445f391c069f4db83e21, type: 3}
@@ -58,3 +58,6 @@ MonoBehaviour:
     TimeBetweenShots: 0.1
     DespawnTime: 3
     LockToSpawn: 0
+    DestroyWithEnemy: 0
+  _totalProjectiles: 0
+  _numProjectilesSpawned: 0

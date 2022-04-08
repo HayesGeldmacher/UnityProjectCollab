@@ -1604,7 +1604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2cbadb6dce1594b889646bb380c932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 50
+  Health: 100
   DamageSound: {fileID: 0}
   StaggerDamage: 0
   StaggerWindow: 0
