@@ -13,7 +13,9 @@ public class SpiderThingEnemy : BaseEnemy
 
 
     //Added the prefab for blood explosion
+    [Header("BloodEffects")]
     public GameObject bloodExplosion;
+    public GameObject bloodSplatter;
 
     public override void Start()
     {
@@ -21,9 +23,11 @@ public class SpiderThingEnemy : BaseEnemy
         base.Start();
        
         //Added onDamage so the spider can register the damage anim, but feel free to change if needed
+        //Possibly change rotation of instantiated hurt effect so that it faces straight out the sphere?
         OnDamage += () =>
         {
             anim.SetTrigger("Damaged");
+            Instantiate(bloodSplatter, transform.position, transform.rotation);
         };
         //Same goes for OnDeath, change as needed
         OnDeath += () => Instantiate(bloodExplosion, transform.position, transform.rotation);
