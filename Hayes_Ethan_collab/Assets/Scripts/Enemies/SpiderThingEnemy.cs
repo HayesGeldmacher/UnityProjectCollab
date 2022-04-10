@@ -11,6 +11,10 @@ public class SpiderThingEnemy : BaseEnemy
     public Animator anim;
     public Transform spidermodel;
 
+
+    //Added the prefab for blood explosion
+    public GameObject bloodExplosion;
+
     public override void Start()
     {
 
@@ -21,6 +25,9 @@ public class SpiderThingEnemy : BaseEnemy
         {
             anim.SetTrigger("Damaged");
         };
+        //Same goes for OnDeath, change as needed
+        OnDeath += () => Instantiate(bloodExplosion, transform.position, transform.rotation);
+      
     }
 
     // Update is called once per frame

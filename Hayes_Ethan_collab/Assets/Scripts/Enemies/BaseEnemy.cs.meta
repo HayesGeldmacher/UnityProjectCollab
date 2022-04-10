@@ -3,7 +3,11 @@ guid: 2b2cbadb6dce1594b889646bb380c932
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - DamageSound: {instanceID: 0}
+  - StaggerEffect: {instanceID: 0}
+  - StaggerSound: {instanceID: 0}
+  - bloodExplosion: {fileID: 5424059809502354342, guid: 7646d7244746d44459f454c2e6fd72f6, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

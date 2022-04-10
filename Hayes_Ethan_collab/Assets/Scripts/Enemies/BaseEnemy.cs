@@ -41,6 +41,7 @@ public class BaseEnemy : Damageable
         _player = GameObject.FindGameObjectWithTag("Player");
         _triggeredAttackPool = new List<EnemyAttackInfo>();
 
+        
         OnDeath += () => Destroy(this.gameObject);
     }
 
