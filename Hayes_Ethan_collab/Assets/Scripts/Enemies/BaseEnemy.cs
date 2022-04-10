@@ -80,6 +80,8 @@ public class BaseEnemy : Damageable
 
         Vector3 p = transform.InverseTransformPoint(_player.transform.position);
         _planeDistanceFromPlayer = Mathf.Sqrt(p.x*p.x + p.z*p.z);
+
+        
     }
 
     private void UpdateAttack(){

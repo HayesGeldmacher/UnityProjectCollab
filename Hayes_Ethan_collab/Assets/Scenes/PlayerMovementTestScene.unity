@@ -712,6 +712,7 @@ MonoBehaviour:
   SeekRadius: 5.5
   FleeRadius: 5
   anim: {fileID: 2142377321}
+  spidermodel: {fileID: 2142377320}
 --- !u!54 &773730967
 Rigidbody:
   m_ObjectHideFlags: 0

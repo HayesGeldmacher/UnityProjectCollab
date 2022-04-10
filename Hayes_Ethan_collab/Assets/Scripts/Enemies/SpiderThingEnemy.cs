@@ -9,11 +9,18 @@ public class SpiderThingEnemy : BaseEnemy
     public float SeekRadius;
     public float FleeRadius;
     public Animator anim;
+    public Transform spidermodel;
 
     public override void Start()
     {
-        
-        base.Start();   
+
+        base.Start();
+       
+        //Added onDamage so the spider can register the damage anim, but feel free to change if needed
+        OnDamage += () =>
+        {
+            anim.SetTrigger("Damaged");
+        };
     }
 
     // Update is called once per frame
@@ -23,6 +30,7 @@ public class SpiderThingEnemy : BaseEnemy
         if(!_attacking)
             UpdateMovement();
         UpdateAnimation();
+       
     }
 
     void UpdateMovement(){
@@ -42,9 +50,11 @@ public class SpiderThingEnemy : BaseEnemy
         _rb.velocity = Vector3.Lerp(oldVel, newVel, .1f);
     }
 
+
     void UpdateAnimation()
     {
         anim.SetBool("Shooting", _attacking);
+        anim.SetBool("Stunned", Staggered);
 
     }
 }
