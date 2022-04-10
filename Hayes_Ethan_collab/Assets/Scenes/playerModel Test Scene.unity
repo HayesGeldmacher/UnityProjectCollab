@@ -444,6 +444,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: spider
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 999d83f3edeabc84ab04431de5c08929, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5ef701e3b6d1902449a8843b900c7e2a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 999d83f3edeabc84ab04431de5c08929, type: 3}
 --- !u!1 &1644419360 stripped
