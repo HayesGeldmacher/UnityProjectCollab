@@ -8,9 +8,12 @@ public class SpiderThingEnemy : BaseEnemy
     public float SightDistance;
     public float SeekRadius;
     public float FleeRadius;
+    public Animator anim;
+
     public override void Start()
     {
-     base.Start();   
+        
+        base.Start();   
     }
 
     // Update is called once per frame
@@ -19,6 +22,7 @@ public class SpiderThingEnemy : BaseEnemy
         base.Update();
         if(!_attacking)
             UpdateMovement();
+        UpdateAnimation();
     }
 
     void UpdateMovement(){
@@ -36,5 +40,11 @@ public class SpiderThingEnemy : BaseEnemy
         Vector3 oldVel = _rb.velocity;
         Vector3 newVel =  (transform.right*_towardsPlayer.x + transform.forward*_towardsPlayer.z)*speed;
         _rb.velocity = Vector3.Lerp(oldVel, newVel, .1f);
+    }
+
+    void UpdateAnimation()
+    {
+        anim.SetBool("Shooting", _attacking);
+
     }
 }
