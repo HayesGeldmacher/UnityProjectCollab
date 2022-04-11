@@ -37,9 +37,11 @@ public class SpiderThingEnemy : BaseEnemy
     // Update is called once per frame
     public override void Update()
     {
-        base.Update();
         if(!_attacking)
             UpdateMovement();
+        
+        base.Update();
+        
         UpdateAnimation();
        
     }
@@ -56,9 +58,9 @@ public class SpiderThingEnemy : BaseEnemy
             speed = -1.33f*Speed;
         else speed = 0;
         
-        Vector3 oldVel = _rb.velocity;
-        Vector3 newVel =  (transform.right*_towardsPlayer.x + transform.forward*_towardsPlayer.z)*speed;
-        _rb.velocity = Vector3.Lerp(oldVel, newVel, .1f);
+        transform.LookAt(transform.position+_towardsPlayer);
+
+        _rb.velocity = transform.forward*speed;
     }
 
 
