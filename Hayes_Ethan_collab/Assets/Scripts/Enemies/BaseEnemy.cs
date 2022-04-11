@@ -76,8 +76,9 @@ public class BaseEnemy : Damageable
 		transform.rotation = Quaternion.FromToRotation(transform.up, gravityUp) * transform.rotation;
         _rb.AddForce(transform.position.normalized*-9.81f);
 
-        Vector3 playerInLocal = transform.InverseTransformPoint(_player.transform.position);
-        _towardsPlayer = new Vector3(playerInLocal.x, 0, playerInLocal.z).normalized;
+        Vector3 playerInLocal = transform.InverseTransformPoint(_player.transform.position - transform.position);
+        _towardsPlayer = transform.TransformDirection(new Vector3(playerInLocal.x, 0, playerInLocal.z)).normalized;
+        Debug.DrawRay(transform.position, _towardsPlayer*10f);
 
         Vector3 p = transform.InverseTransformPoint(_player.transform.position);
         _planeDistanceFromPlayer = Mathf.Sqrt(p.x*p.x + p.z*p.z);
