@@ -715,6 +715,7 @@ MonoBehaviour:
   spidermodel: {fileID: 2142377320}
   bloodExplosion: {fileID: 5424059809502354342, guid: 7646d7244746d44459f454c2e6fd72f6, type: 3}
   bloodSplatter: {fileID: 8483142864338277211, guid: f7389ab5948e20242b5038661e4e77b5, type: 3}
+  Corpse: {fileID: 8690753190874124216}
 --- !u!54 &773730967
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2102,3 +2103,85 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 999d83f3edeabc84ab04431de5c08929, type: 3}
   m_PrefabInstance: {fileID: 1456434123}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &6466680299897339376
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8690753190874124216}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 64624d907565c2942bab5e51ca9c4653, type: 2}
+  - {fileID: 2100000, guid: 05f81cdc103a83741b205d58b07e80e0, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!4 &8243763306562702375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8690753190874124216}
+  m_LocalRotation: {x: -0.7143613, y: -0, z: -0, w: 0.699777}
+  m_LocalPosition: {x: -0.26666662, y: 0.61, z: -1.35}
+  m_LocalScale: {x: 80, y: 80, z: 108.5}
+  m_Children: []
+  m_Father: {fileID: 2142377320}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: -91.182, y: 0, z: 0}
+--- !u!33 &8310307777356722265
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8690753190874124216}
+  m_Mesh: {fileID: -9067250917444920460, guid: d2dd6f5c9e9148d46aced1af9c1d638f, type: 3}
+--- !u!1 &8690753190874124216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8243763306562702375}
+  - component: {fileID: 8310307777356722265}
+  - component: {fileID: 6466680299897339376}
+  m_Layer: 0
+  m_Name: Corpse
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1

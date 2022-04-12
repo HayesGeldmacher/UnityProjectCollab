@@ -16,6 +16,7 @@ public class SpiderThingEnemy : BaseEnemy
     [Header("BloodEffects")]
     public GameObject bloodExplosion;
     public GameObject bloodSplatter;
+    public GameObject Corpse;
 
     public override void Start()
     {
@@ -28,9 +29,18 @@ public class SpiderThingEnemy : BaseEnemy
         {
             anim.SetTrigger("Damaged");
             Instantiate(bloodSplatter, transform.position, transform.rotation);
+            
         };
         //Same goes for OnDeath, change as needed
-        OnDeath += () => Instantiate(bloodExplosion, transform.position, transform.rotation);
+        OnDeath += () =>
+        {
+            //Activates and seperates the corpse mesh from the spider before it's destroyed
+            MeshRenderer corpseRenderer = Corpse.transform.GetComponent<MeshRenderer>();
+            Instantiate(bloodExplosion, Corpse.transform.position, transform.rotation);
+            corpseRenderer.enabled = true;
+            Corpse.transform.parent = null;
+        };
+        
       
     }
 
