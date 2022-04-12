@@ -36,6 +36,11 @@ public class SpiderThingEnemy : BaseEnemy
         {
             //Activates and seperates the corpse mesh from the spider before it's destroyed
             MeshRenderer corpseRenderer = Corpse.transform.GetComponent<MeshRenderer>();
+            AudioSource scream = Corpse.transform.GetComponent<AudioSource>();
+            if (scream)
+            {
+                scream.Play();
+            }
             Instantiate(bloodExplosion, Corpse.transform.position, transform.rotation);
             corpseRenderer.enabled = true;
             Corpse.transform.parent = null;
