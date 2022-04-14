@@ -1186,7 +1186,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0, b: 0, a: 1}
+      key0: {r: 1, g: 0, b: 0, a: 1}
       key1: {r: 0, g: 0, b: 0, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -1364,8 +1364,8 @@ MonoBehaviour:
   m_UVScale: {x: 1, y: 1}
   m_UVBias: {x: 0, y: 0}
   m_ScaleMode: 0
-  m_Offset: {x: 0, y: 0, z: 0.5}
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Offset: {x: 0, y: 0, z: 0.755}
+  m_Size: {x: 5, y: 5, z: 1.51}
   m_FadeFactor: 1
 --- !u!4 &1375887196
 Transform:
@@ -1374,14 +1374,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1375887194}
-  m_LocalRotation: {x: 0.48549417, y: -0.5140967, z: -0.5140968, w: 0.48549417}
-  m_LocalPosition: {x: 10.285, y: 0.354, z: 1.63}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0169}
+  m_LocalScale: {x: 0.041660376, y: 0.0307254, z: 0.041666653}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: -3.278, y: -90, z: -90}
+  m_Father: {fileID: 8243763306562702375}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1422802005 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e35b701e3a4b9c24c99e75a95c3ec801, type: 3}
@@ -2226,7 +2226,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8690753190874124216}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2273,7 +2273,8 @@ Transform:
   m_LocalPosition: {x: -0.26666662, y: 0.61, z: -1.35}
   m_LocalScale: {x: 80, y: 80, z: 108.5}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1375887196}
   m_Father: {fileID: 2142377320}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -91.182, y: 0, z: 0}
@@ -2303,7 +2304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &8690753190874124217
 AudioSource:
   m_ObjectHideFlags: 0
