@@ -16,6 +16,7 @@ public class SpiderThingEnemy : BaseEnemy
     [Header("BloodEffects")]
     public GameObject bloodExplosion;
     public GameObject bloodSplatter;
+    public GameObject GoreChunk;
     public GameObject Corpse;
 
     public override void Start()
@@ -42,6 +43,7 @@ public class SpiderThingEnemy : BaseEnemy
                 scream.Play();
             }
             Instantiate(bloodExplosion, Corpse.transform.position, transform.rotation);
+            
             //corpseRenderer.enabled = true;
             Corpse.SetActive(true);
             Corpse.transform.parent = null;
