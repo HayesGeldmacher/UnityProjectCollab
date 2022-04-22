@@ -75,8 +75,9 @@ public class SpiderThingEnemy : BaseEnemy
         else if(_planeDistanceFromPlayer <= FleeRadius)
             speed = -1.33f*Speed;
         else speed = 0;
-        
-        transform.LookAt(transform.position+_towardsPlayer);
+
+        if (!Staggered)
+            transform.LookAt(transform.position+_towardsPlayer);
 
         _rb.velocity = transform.forward*speed;
     }

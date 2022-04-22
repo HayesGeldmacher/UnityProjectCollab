@@ -7,6 +7,7 @@ public class GoreScatter : MonoBehaviour
     public Rigidbody rigid;
     public float HorizontalSpeed;
     public float VerticalSpeed;
+    //Possibly add system to randomly change the mesh to other chunk meshes!
    
     // Start is called before the first frame update
     void Start()
