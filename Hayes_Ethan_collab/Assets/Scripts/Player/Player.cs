@@ -377,11 +377,13 @@ public class Player : Damageable
        
         Anim.SetBool("Walking", _rb.velocity.magnitude >= .1);
         Anim.SetBool("Dash", _isDashing);
+        Anim.SetBool("isSiphoning", _isSiphoning);
        
         //doesnt enter charge animation when firing in quick succession
         if(_chargeTime > MinChargeTime)
             Anim.SetBool("isCharging", _isCharging);
 
+        
         if (_isFiring)
         {
              Anim.SetTrigger("Shot");
