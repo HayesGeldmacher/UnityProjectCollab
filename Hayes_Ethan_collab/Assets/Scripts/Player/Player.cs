@@ -16,9 +16,10 @@ public class Player : Damageable
     public float InvincibilityTime;
     public float DashCooldown;
     [Space(5)]
-    public AudioClip WalkSound;
+    public AudioSource WalkSound;
     public GameObject DashEffect;
     public AudioClip DashSound;
+    
     [Space(15)]
     
     [Header("Combat")]
@@ -132,6 +133,13 @@ public class Player : Damageable
 
         bool dashButton = Input.GetAxisRaw("Dash") > .1;
         bool moving = Mathf.Abs(_hInput)>.1 || Mathf.Abs(_vInput)>.1;
+
+        if (moving && !_isDashing)
+            WalkSound.UnPause();
+        else
+        {
+            WalkSound.Pause();
+        }
 
         if(moving && !_isDashing && !_dashCooldown && dashButton)
             StartCoroutine(Dash());
